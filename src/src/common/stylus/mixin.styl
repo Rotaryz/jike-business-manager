@@ -1,0 +1,49 @@
+// 不换行
+no-wrap()
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+
+// 扩展点击区域
+extend-click()
+  position: relative
+  &:before
+    content: ''
+    position: absolute
+    top: -10px
+    left: -10px
+    right: -10px
+    bottom: -10px
+
+//  水平居中
+row-center()
+  position: absolute
+  left: 50%
+  transform: translateX(-50%)
+
+//垂直居中
+col-center()
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+//  全居中
+all-center()
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+bg-image($url)
+  background-image: url($url + "@2x.png")
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")
+
+icon-image($name)
+  display: inline-block
+  background-size: 100% 100%
+  background-image: url("./" + $name + "@2x.png")
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url("./" + $name + "@3x.png")
+
+
