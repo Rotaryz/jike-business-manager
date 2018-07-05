@@ -239,7 +239,7 @@
       padding: 0 5.5vw 0 2.8vw
       .monty-title
         color: $color-text
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         display: flex
         justify-content: space-between
         margin: 2vh 0 2vh 0
@@ -327,7 +327,7 @@
         width: 112px
         no-wrap()
       &:first-child
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         height: 60px
         line-height: 60px
         position: relative

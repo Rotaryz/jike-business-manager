@@ -165,7 +165,7 @@
             height: 40px
             border-radius: 100%
           .nick-name
-            font-size: $font-size-medium-x
+            font-size: $font-size-medium16
             color: $color-text-icon
             margin: 0 20px 0 10px
           .icons-top

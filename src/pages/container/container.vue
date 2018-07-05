@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <navigation ref="nav"></navigation>
-    <div class="left-side" :style="{'margin-left': width + 'px'}">
-      <div class="herder-peo" :style="{'left': width + 'px','width': offsetWhidt +'px'}">
+    <div class="left-side" >
+      <div class="herder-peo">
         <div class="guild-box" @click="checkStatus">
           <img src="./icon-menu@2x.png" class="guide"
                :class="{'guide-rotate':navStatus}">
@@ -44,9 +44,9 @@
       }
     },
     created() {
-      window.onresize = () => {
-        this.offsetWhidt = document.body.clientWidth - this.width
-      }
+      // window.onresize = () => {
+      //   this.offsetWhidt = document.body.clientWidth - this.width
+      // }
     },
     methods: {
       showlogout() {
@@ -87,22 +87,21 @@
   @import '~common/stylus/mixin'
   .container
     height: 100vh
-    display: flex
     .left-side
-      position: relative
-      flex: 1
-      width: 100%
+      height : 100%
+      overflow :hidden
       display: flex
       flex-direction: column
+      position : relative
       .herder-peo
-        position: fixed
+        position: absolute
         top: 0
         z-index: 800
         left: 0
         width: 100%
         background: $color-white
         display: flex
-        height: 65px
+        height: 80px
         align-items: center
         justify-content: space-between
         border-bottom: 1px solid #eee
@@ -187,6 +186,6 @@
         .user-active
           background: $color-background
       .content
-        margin-top: 65px
+        margin-top: 80px
         flex: 1
 </style>

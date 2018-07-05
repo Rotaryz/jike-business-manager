@@ -205,7 +205,7 @@
         border-bottom: 1px solid $color-big-background
         .list-item
           line-height: 16px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
     .list-text
       white-space: nowrap
       text-overflow: ellipsis
@@ -229,7 +229,7 @@
       .amend
         position: absolute
         right: 30px
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         padding: 8px 18px
         line-height: 1
         col-center()
@@ -252,7 +252,7 @@
 
   .selects
     display: flex
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     color: $color-text
     line-height: 30px
     transform: translateY(-25%)
@@ -283,7 +283,7 @@
   .order-sec
     display: flex
     flex-wrap: wrap
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     align-items: center
     color: $color-text
     line-height: 30px

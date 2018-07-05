@@ -378,7 +378,7 @@
               width: 64px
               display: flex
               font-family: 'PingFangSC-Light'
-              font-size: $font-size-medium-x
+              font-size: $font-size-medium16
               justify-content: space-between
             .nav
               col-center()
@@ -464,7 +464,7 @@
                 border-bottom-right-radius: 3px
                 border-bottom-left-radius: 3px
               .nav-tap
-                font-size: $font-size-medium-x
+                font-size: $font-size-medium16
                 padding: 0 70px 0 20px
                 .small-title
                   min-width: 84px

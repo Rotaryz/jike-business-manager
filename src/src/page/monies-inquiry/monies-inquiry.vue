@@ -474,7 +474,7 @@
         border-bottom: 1px solid $color-big-background
         .list-item
           line-height: 16px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
     .list-text
       width: 90%
       white-space: nowrap
@@ -506,7 +506,7 @@
     overflow-y: auto
     .shade-border
       border-bottom: 1px solid $color-icon-line
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding-left: 30px
       display: flex
       height: 5.01vh
@@ -517,7 +517,7 @@
         no-wrap()
       &:first-child
         height: 7.01vh
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium14-x
         position: relative
         .close
           cursor: pointer
@@ -591,7 +591,7 @@
   .order-sec
     display: flex
     flex-wrap: wrap
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     align-items: center
     color: $color-text
     line-height: 30px
@@ -635,7 +635,7 @@
     margin-left: 3.56vw
 
   .down-excel
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     height: 30px
     line-height: 30px
     text-align: center

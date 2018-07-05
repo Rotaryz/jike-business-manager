@@ -1,73 +1,30 @@
 <template>
   <div class="form-box">
-    <div class="tag" :class="{'tag-no-top':tagTop}">
+    <div class="herder-peo">
+      <div class="guild-box" @click="checkStatus">
+        <img src="./icon-menu@2x.png" class="guide"
+             :class="{'guide-rotate':navStatus}">
+      </div>
+      <div class="user" :class="{'user-active': logout}" @mouseenter="showlogout" @mouseleave="hidelogout">
+        <img src="./header.jpeg" class="user-header">
+        <span class="nick-name">{{userName}}</span>
+        <i class="icons-top" :class="logout ? 'icons-bottom': '' "></i>
+        <transition name="fade">
+          <div class="logout-box" v-show="logout" @mouseenter="showlogout">
+            <div class="logout" @click.stop="isLogout">
+              <span class="logout-icons"></span>
+              退出登录
+            </div>
+          </div>
+        </transition>
+      </div>
+    </div>
+    <div class="tag">
       <div class="tag-title">
         <span class="title-item" v-for="(item,index) in navTitle" :key="index">{{index > 0 ? '/' : ''}} {{item}}</span>
       </div>
       <div class="tag-choice" v-if="chioce">
         <slot name="order-sec"></slot>
-        <div class="tag-time" v-if="isDate">
-          <span class="time-title" v-for="(item, index) in timeList"
-                :key="index" :class="{'time-title-active': timeIndex === index}"
-                @click="checkTime(index,item.type)">
-            {{item.title}}
-             <div class="block" v-if="item.type === ''" v-show="showPicker">
-              <el-date-picker
-                v-model="moreTime"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期">
-              </el-date-picker>
-            </div>
-          </span>
-        </div>
-        <div class="tag-city" v-if="isCity">
-          <span class="city-title">地域筛选</span>
-          <div class="city-select" v-for="(item, index) in cityList" :class="{'city-select-active': item.show}"
-               :key="index" @click.stop="checkCity(index)" @mouseleave="leaveHide" @mouseenter="endShow" :style="{'cursor': prams[index - 1] === '' && index !== 0 ? 'not-allowed' : 'pointer'}">
-            <div class="city-show" :class="{'city-show-active':item.active}">
-              {{item.title}}
-              <div class="city-tap">
-                <span class="city-tap-top" :class="{'city-tap-bottom':item.show && item.active,'city-tap-top-two': !item.show && item.active}"></span>
-              </div>
-            </div>
-            <div class="city-big-box">
-              <transition name="fade">
-                <ul class="city-box" v-show="item.show">
-                  <li class="city-box-item" v-for="(items, idx) in item.data"
-                      :class="{'city-box-item-active':item.index === idx}"
-                      :key="idx" @click.stop="showCityList(idx,index,items)">{{items}}
-                  </li>
-                </ul>
-              </transition>
-            </div>
-          </div>
-        </div>
-        <div class="tag-industry" v-if="isIndustrie">
-          <span class="city-title">行业筛选</span>
-          <div class="city-select" v-for="(item, index) in industrieList" :class="{'city-select-active': item.show}"
-               :key="index" @click.stop="industrie(index)" @mouseleave="leaveHide" @mouseenter="endShow" :style="{'cursor': industrieId === -1 && index !== 0 ? 'not-allowed' : 'pointer'}">
-            <div class="city-show" :class="{'city-show-active':item.active}">
-              {{item.title}}
-              <div class="city-tap">
-                <span class="city-tap-top" :class="{'city-tap-bottom':item.show && item.active,'city-tap-top-two': !item.show && item.active}"></span>
-              </div>
-            </div>
-            <div class="city-big-box">
-              <transition name="fade">
-                <ul class="city-box" v-show="item.show">
-                  <li class="city-box-item" v-for="(items, idx) in item.data"
-                      :key="idx"
-                      :class="{'city-box-item-active':item.index === idx}"
-                      @click.stop="industrieDetail(idx,index,items.name,items.id)">
-                    {{items.name}}
-                  </li>
-                </ul>
-              </transition>
-            </div>
-          </div>
-        </div>
         <slot name="tag-sel"></slot>
       </div>
       <slot name="tap"></slot>
@@ -111,28 +68,29 @@
                 </div>
               </div>
               <div class="input-box" :class="{'input-height': focus}">
-                <input type="number" class="border-page input-height-item" v-model="pageInput" :focus="focus" @click.stop="focus = !focus"/>
+                <input type="number" class="border-page input-height-item" v-model="pageInput" :focus="focus" @click.stop="focus = !focus" />
               </div>
               <div class="border-page input-height-item" @click="goPage" @mouseenter="notAllowed" :style="{'cursor': isHand.handGo}">跳转</div>
             </div>
           </div>
         </div>
       </div>
-      <transition name="fade">
-        <div class="shade-win" @click.stop="hideShade" v-show="isShade">
-          <div class="shade-detail" @click.stop>
-            <slot name="shade-box"></slot>
-          </div>
-        </div>
-      </transition>
     </div>
+    <transition name="fade">
+      <div class="shade-win" @click.stop="hideShade" v-show="!isShade">
+        <div class="shade-detail" @click.stop>
+          <slot name="shade-box"></slot>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import globals from 'api/globals'
-  import {ERR_OK} from 'api/config'
+  import { ERR_OK } from 'api/config'
   import Toast from 'components/toast/toast'
+
   const allWay = '全部'
   const shopWay = {id: 0, name: '全部', parent_id: -1}
   export default {
@@ -177,7 +135,7 @@
         default: () => [{total: 1, per_page: 10, total_page: 0}]
       }
     },
-    data() {
+    data () {
       return {
         focus: false,
         showBlank: false,
@@ -232,10 +190,17 @@
         shopData: ['', ''],
         navTitle: [],
         setTime: null,
-        isHand: {handLeft: 'pointer', handRight: 'pointer', handGo: 'pointer'}
+        isHand: {handLeft: 'pointer', handRight: 'pointer', handGo: 'pointer'},
+        navStatus: true,
+        userName: localStorage.getItem('userName') || sessionStorage.getItem('userName'),
+        logout: false,
+        showOut: false,
+        dataStatus: '',
+        width: 200,
+        offsetWhidt: document.body.clientWidth - 200
       }
     },
-    created() {
+    created () {
       this.showCity()
       window.onkeydown = (e) => {
         if (e.keyCode === 13) {
@@ -257,28 +222,54 @@
       this.setNavTitle()
     },
     methods: {
-      setNavTitle() {
+      showlogout () {
+        this.logout = true
+      },
+      hidelogout () {
+        this.logout = false
+      },
+      checkStatus () {
+        let res = this.$refs.nav.isShowBig()
+        this.width = res
+        this.offsetWhidt = document.body.clientWidth - this.width
+        this.navStatus = !this.navStatus
+      },
+      hideNav () {
+        this.$refs.nav.hideHover()
+      },
+      isLogout () {
+        localStorage.clear()
+        sessionStorage.clear()
+        location.href = '#/login'
+      },
+      showHeight () {
+        this.showOut = true
+      },
+      hideHeight () {
+        this.showOut = false
+      },
+      setNavTitle () {
         setTimeout(() => {
           this.navTitle = sessionStorage.getItem('title') ? sessionStorage.getItem('title').split(',') : this.navTitle
         }, 30)
       },
-      hideHeightLine() {
+      hideHeightLine () {
         this.timeIndex = -1
         return this.timeIndex
       },
-      isBlank(res) {
+      isBlank (res) {
         if (res.length === 0) {
           this.showBlank = true
         } else {
           this.showBlank = false
         }
       },
-      leaveHide() {
+      leaveHide () {
         this.setTime = setTimeout(() => {
           this.clickHide()
         }, 1500)
       },
-      clickHide() {
+      clickHide () {
         this.cityList.forEach((item) => {
           item.show = false
         })
@@ -286,10 +277,10 @@
           item.show = false
         })
       },
-      endShow() {
+      endShow () {
         clearTimeout(this.setTime)
       },
-      industrieDetail(idx, index, title, id) {
+      industrieDetail (idx, index, title, id) {
         this.cityList[index].index = idx
         setTimeout(() => {
           this.industrieList[index].show = false
@@ -308,7 +299,7 @@
           this.$emit('showIndustrie', shop)
         }, 100)
       },
-      showIndustrie() {
+      showIndustrie () {
         let data = {}
         if (this.industrieId !== -1) {
           data = {partent_id: this.shopData[0]}
@@ -320,7 +311,7 @@
           }
         })
       },
-      industrie(index) {
+      industrie (index) {
         this.cityList.forEach((item) => {
           item.show = false
         })
@@ -344,7 +335,7 @@
         this.industrieList[index].active = true
         this.showIndustrie()
       },
-      goPage() {
+      goPage () {
         if (this.pageInput !== '') {
           this.pageInput = Math.floor(this.pageInput * 1)
           if (this.pageInput > this.pageDtail[0].total_page) {
@@ -356,15 +347,15 @@
           this.$emit('addPage', this.page)
         }
       },
-      showPageDetail() {
+      showPageDetail () {
         this.pageDetail = !this.pageDetail
       },
-      hidePageDetail() {
+      hidePageDetail () {
         this.clickHide()
         this.pageDetail = false
         this.focus = false
       },
-      detailPage(page) {
+      detailPage (page) {
         this.page = page
         this.pageIndex = page
         setTimeout(() => {
@@ -372,7 +363,7 @@
         }, 100)
         this.$emit('addPage', this.page)
       },
-      showCity() {
+      showCity () {
         this.hideShade()
         let data = this.infoData(this.prams)
         globals.businessCircle(data).then((res) => {
@@ -384,7 +375,7 @@
           }
         })
       },
-      checkCity(index) {
+      checkCity (index) {
         this.industrieList.forEach((item) => {
           item.show = false
         })
@@ -402,7 +393,7 @@
         this.cityList[index].active = true
         this.showCity()
       },
-      showCityList(idx, index, title) {
+      showCityList (idx, index, title) {
         this.cityList[index].index = idx
         setTimeout(() => {
           this.cityList[index].show = false
@@ -423,12 +414,12 @@
           this.$emit('showCity', this.prams, this.page)
         }, 100)
       },
-      regPrams() {
+      regPrams () {
         for (let i = 0; i < this.prams.length; i++) {
           this.prams[i] = this.cityList[i].title.replace(/^(市)|^(区)|^(商圈)/g, '')
         }
       },
-      infoData(res) {
+      infoData (res) {
         let data = {
           province: res[0],
           city: res[1],
@@ -437,7 +428,7 @@
         }
         return data
       },
-      checkTime(index, type) {
+      checkTime (index, type) {
         this.hideShade()
         this.timeIndex = index
         if (type === '') {
@@ -448,42 +439,42 @@
         this.showPicker = false
         this.$emit('checkTime', type, this.page)
       },
-      showShade() {
+      showShade () {
         this.isShade = true
       },
-      hideShade() {
+      hideShade () {
         this.isShade = false
       },
-      addPage() {
+      addPage () {
         if (this.page < this.pageDtail[0].total_page) {
           this.page++
           this.$emit('addPage', this.page)
         }
         this.notAllowed()
       },
-      notAllowed() {
+      notAllowed () {
         this.page === 1 ? this.isHand.handLeft = 'not-allowed' : this.isHand.handLeft = 'pointer'
         this.page === this.pageDtail[0].total_page ? this.isHand.handRight = 'not-allowed' : this.isHand.handRight = 'pointer'
         this.pageInput === '' ? this.isHand.handGo = 'not-allowed' : this.isHand.handGo = 'pointer'
       },
-      subtract() {
+      subtract () {
         if (this.page > 1) {
           this.page--
           this.$emit('addPage', this.page)
         }
         this.notAllowed()
       },
-      showContent(content, time) {
+      showContent (content, time) {
         const showTime = time || 1000
         this.$refs.toast.show(content, showTime)
       },
-      beginPage() {
+      beginPage () {
         this.pageInput = ''
         this.page = 1
       }
     },
     watch: {
-      moreTime(newVal) {
+      moreTime (newVal) {
         let time = []
         if (Array.isArray(newVal)) {
           newVal.forEach((item) => {
@@ -494,7 +485,8 @@
       }
     },
     components: {
-      'toast': Toast
+      'toast':
+      Toast
     }
   }
 </script>
@@ -504,32 +496,21 @@
   @import '~common/stylus/mixin'
   .form-box
     height: 100%
-    min-height: 700px
-    overflow-y: auto
+    max-height: 900px
+    overflow-y: scroll
     display: flex
     flex-direction: column
     .tag
       background: $color-white
-      position: relative
-      z-index: 150
-      height: 150px
+      height: 90px
       .tag-title
-        padding: 3.47vh 0 1.57vh 0
-        font-size: $font-size-large
-        height : $font-size-large
+        line-height: 90px
         color: $color-text-little
-        text-indent: 30px
-        position: relative
-        &:before
-          content: ''
-          position: absolute
-          background: $color-nomal
-          top: 3.47vh
-          height: 18px
-          width: 4px
-          left: 25px
+        text-indent: 25.4px
+        font-size: $font-size-large18
+        font-family: $fontFamilyLight
         .title-item
-          margin-left: 7px
+          margin-left: 6px
           &:last-child
             color: $color-text
       .tag-choice
@@ -546,7 +527,7 @@
             position: relative
             margin-left: 1.5625vw
             padding-bottom: 10px
-            font-size: $font-size-medium
+            font-size: $font-size-medium14
             color: $color-text
             &:hover
               color: $color-nomal
@@ -570,7 +551,7 @@
       .tag-city, .tag-industry
         margin-left: 2.6vw
         display: flex
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         color: $color-text
         .city-title
           line-height: 17px
@@ -581,7 +562,7 @@
           margin-left: 10px
           border: 1px solid $color-white
           border-radius: 4px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
           color: $color-text-little
           transform: translateY(-25%)
           position: relative
@@ -677,7 +658,7 @@
               text-align: left
               height: 26px
               line-height: 26px
-              font-size: $font-size-medium
+              font-size: $font-size-medium14
               &:hover
                 background: $color-big-background
             .city-box-item-active
@@ -724,7 +705,7 @@
           justify-content: space-between
           padding: 0 15px 0 30px
           color: $color-text
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
           .page
             display: flex
             align-items: center
@@ -748,7 +729,7 @@
               border-radius: 3px
               margin-right: 10px
               border: 1px solid $color-line
-              font-size: $font-size-medium
+              font-size: $font-size-medium14
             div.border-page
               margin-right: 0
               padding: 0 15px
@@ -794,7 +775,7 @@
                 background: $color-white
                 border-radius: 3px
                 bottom: 30px
-                font-size: $font-size-medium
+                font-size: $font-size-medium14
                 color: $color-text-little
                 max-height: 290px
                 overflow-y: auto
@@ -825,21 +806,116 @@
               margin-right: 10px
         .totle-more
           height: 4.8%
-      .shade-win
-        height: 100%
-        width: 100%
-        background: rgba(50, 50, 58, 0.60)
+
+  .shade-win
+    height: 100vh
+    width: 100%
+    z-index: 2000
+    background: rgba(50, 50, 58, 0.60)
+    position: absolute
+    top: 0
+    left: 0
+    &.fade-enter, &.fade-leave-to
+      opacity: 0
+    &.fade-enter-to, &.fade-leave-to
+      transition: opacity .2s ease-in-out
+    .shade-detail
+      all-center()
+      box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.60)
+      border-radius: 3px
+      background: $color-white
+      box-sizing :border-box
+      width: 534px
+
+  .herder-peo
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    background: $color-white
+    display: flex
+    height: 80px
+    align-items: center
+    justify-content: space-between
+    border-bottom: 1px solid #eee
+    .guild-box
+      height: 100%
+      width: 78px
+      position: relative
+      cursor: pointer
+      &:hover
+        background: $color-background
+    .guide
+      margin-left: 26px
+      margin-top: 19.5px
+      height: 26px
+      width: 26px
+      transform: rotateY(180deg)
+      transition: all 0.5s
+    .guide-rotate
+      transform: rotateY(0deg)
+      transition: all 0.5s
+    .user
+      cursor: pointer
+      height: 100%
+      display: flex
+      align-items: center
+      padding: 0 41px 0 33px
+      position: relative
+      z-index: 1500
+      .logout-box
         position: absolute
-        top: 0
-        left: 0
+        right: 2px
+        bottom: -58px
+        height: 58px
+        width: 99%
+        z-index: 1500
         &.fade-enter, &.fade-leave-to
           opacity: 0
         &.fade-enter-to, &.fade-leave-to
-          transition: opacity .2s ease-in-out
-        .shade-detail
-          all-center()
-          box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.60)
-          border-radius: 3px
-          background: $color-white
-          width: 450px
+          transition: all .2s ease-in-out
+      .logout
+        background-color: $color-white
+        margin-top: 4px
+        border-radius: 3px
+        width: 100%
+        text-indent: 64px
+        height: 50px
+        box-shadow: 0 3px 8px 0 rgba(12, 6, 14, 0.20)
+        line-height: 50px
+        z-index: 200
+        .logout-icons
+          position: absolute
+          left: 30px
+          height: 22px
+          width: 22px
+          icon-image('icon-exit')
+          col-center()
+      .logout:active
+        background: $color-background
+      .user-header
+        height: 40px
+        border-radius: 100%
+      .nick-name
+        font-size: $font-size-medium-x
+        color: $color-text-icon
+        margin: 0 20px 0 10px
+      .icons-top
+        height: 0px
+        border: 8px solid $color-text-icon
+        border-bottom: 8px solid transparent
+        border-left: 8px solid transparent
+        border-right: 8px solid transparent
+        position: absolute
+        right: 28px
+        top: 47%
+        transform-origin: 7px 3px
+        transform: rotate(0deg)
+        transition: all 0.2s
+      .icons-bottom
+        transform-origin: 7px 3px
+        transform: rotate(180deg)
+        transition: all 0.2s
+    .user-active
+      background: $color-background
 </style>

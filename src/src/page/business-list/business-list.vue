@@ -552,7 +552,7 @@
         border-bottom: 1px solid $color-big-background
         .list-item
           line-height: 16px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
     .list-text
       white-space: nowrap
       text-overflow: ellipsis
@@ -600,7 +600,7 @@
     max-height: 540px
     overflow-y: auto
     .shade-border
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding-left: 30px
       display: flex
       height: 5.01vh
@@ -619,7 +619,7 @@
         border: 0.5px solid $color-line
       textarea.shade-text
         padding-top: 2px
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         box-sizing: border-box
         outline: none
       .shade-text
@@ -637,7 +637,7 @@
         min-width: 112px
         no-wrap()
       &:first-child
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         height: 7.01vh
         position: relative
         .close
@@ -866,7 +866,7 @@
       align-items: center
       height: 5.2vw
       .submit
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         display: inline-block
         height: 2.5vw
         width: 11.45vw

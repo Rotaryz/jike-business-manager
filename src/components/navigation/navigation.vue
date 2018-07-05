@@ -64,71 +64,58 @@
   const NAVLIST = [
     {
       title: '首页',
-      url: '#/container/notes',
-      icon: require('./icon-home@2x.png'),
+      url: 'javaScript:;',
+      icon: require('./icon-homepage@2x.png'),
       childrenIndex: -1,
       children: [{
-        title: '代办事项',
-        url: '#/container/notes'
-      }, {
         title: '首页',
         url: 'javaScript:;'
       }],
       showHeight: HEIGHT
     }, {
-      title: '数据概况',
-      url: '#/container/data',
-      icon: require('./icon-data@2x.png'),
+      title: '小程序管理',
+      url: '#/container/officialNetwork',
+      icon: require('./icon-applet_selected@2x.png'),
       childrenIndex: -1,
       children: [{
-        title: '数据概况',
-        url: '#/container/data'
+        title: '公司官网',
+        url: '#/container/officialNetwork'
+      }, {
+        title: '公司产品',
+        url: '#/container/product'
       }],
       showHeight: HEIGHT
     }, {
-      title: '商家管理',
+      title: '员工管理',
       url: '#/container/businessList',
-      icon: require('./icon-shop@2x.png'),
+      icon: require('./icon-staff@2x.png'),
       childrenIndex: -1,
       children: [{
-        title: '商家列表',
+        title: '组织架构',
         url: '#/container/businessList'
       }, {
-        title: '商圈概况',
+        title: '权限管理',
         url: '#/container/businessGeneral'
       }],
       showHeight: HEIGHT
     }, {
-      title: '客户管理',
-      icon: require('./icon-guest@2x.png'),
+      title: '授权管理',
+      icon: require('./icon-authorization@2x.png'),
       url: '#/container/client',
       childrenIndex: -1,
       children: [{
-        title: '客户管理',
+        title: '授权管理',
         url: '#/container/client'
       }],
       showHeight: HEIGHT
     }, {
-      title: '订单查询',
-      icon: require('./icon-indent@2x.png'),
-      url: '#/container/moniesInquiry',
-      childrenIndex: -1,
-      children: [{
-        title: '订单查询',
-        url: '#/container/moniesInquiry'
-      }],
-      showHeight: HEIGHT
-    }, {
-      title: '账户管理',
+      title: '账户中心',
       icon: require('./icon-account@2x.png'),
-      url: '#/container/account',
+      url: '#/container/accountCenter',
       childrenIndex: -1,
       children: [{
-        title: '收支记录',
-        url: '#/container/account'
-      }, {
-        title: '提现管理',
-        url: '#/container/withdraw'
+        title: '账户中心',
+        url: '#/container/accountCenter'
       }],
       showHeight: HEIGHT
     }]
@@ -140,7 +127,7 @@
     data() {
       return {
         smallIndex: 0,
-        title: '赞播管理后台',
+        title: '商家管理平台',
         navList: NAVLIST,
         hoverIndex: -1,
         hoverChildIndex: 0,
@@ -204,6 +191,7 @@
           this.bigChild = index
           sessionStorage.setItem('title', [this.navList[index].title])
         } else if (this.navList[index].children.length > 1) {
+          console.log('fdf')
           clearInterval(this.timer)
           let childCode = this.navList[index].childrenIndex === -1 ? 0 : this.navList[index].childrenIndex
           this.recodIndex = index
@@ -326,32 +314,28 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .navigation
-    position: fixed
-    left: 0
-    top: 0
-    z-index: 1000
+    float: left
     background: $color-menu-background
     color: $color-white
-    min-height: 717px
     height: 100vh
-    overflow-y ：scroll
+    position: relative
+    z-index : 1000
     .big-show
       width: 200px
       .herder
-        padding-left: 57px
+        padding-left: 52px
         height: 65px
         overflow: hidden
         line-height: 67px
-        font-size: 20px
+        font-size: $font-size-large20
         background: $color-menu-select
         position: relative
         .icon
           col-center()
           icon-image('pic-logo_menu')
-          height: 32px
-          width: 30px
-          left: 22px
-          transform: translateY(-55%)
+          height: 20px
+          width: 18px
+          left: 29px
       .nav-big
         .nav-item
           background: $color-menu-background
@@ -359,7 +343,6 @@
           border-bottom: 1px solid #3B3B43
           .nav-tap
             transition: all 0.2s
-            border-left: 4px solid $color-menu-background
             align-items: center
             color: $color-white
             display: flex
@@ -368,17 +351,17 @@
             position: relative
             .nav-icon
               height: 100%
-              width: 58px
+              width: 55px
               position: relative
               .nav-pic
-                height: 20px
+                height: 17px
                 col-center()
-                left: 20px
+                left: 27px
             .nav-title
               width: 64px
               display: flex
               font-family: 'PingFangSC-Light'
-              font-size: $font-size-medium-x
+              font-size: $font-size-medium16
               justify-content: space-between
             .nav
               col-center()
@@ -395,22 +378,18 @@
               transition: transform 0.2s
             &:hover
               background: $color-menu-select
-              border-left: 4px solid $color-menu-select
               transition: all 0.2s
           .nav-tap-active
-            background: $color-menu-select
-            border-left: 4px solid $color-nomal !important
-          .nav-item-no-border
-            border-left: 4px solid $color-menu-background
+            background: $color-nomal !important
+
         .nav-big-child
           .nav-tap
             .nav-icon
               width: 46px
           .nav-title
-            margin-left: 20px
+            margin-left: 13px
           .nav-big-active
-            background: $color-menu-select
-            border-left: 4px solid $color-nomal !important
+            background: $color-nomal !important
     .big-hide
       width: 79px
       transition: all .2s
@@ -433,7 +412,6 @@
           height: 60px
           border-bottom: 1px solid #3B3B43
           position: relative
-          border-left: 4px solid $color-menu-background
           .nav-tap
             display: block
             height: 100%
@@ -441,7 +419,7 @@
             color: $color-white
             line-height: 46px
           .nav-pic
-            height: 20px
+            height: 17px
             col-center()
             left: 20px
           .nav-small-box
@@ -464,7 +442,7 @@
                 border-bottom-right-radius: 3px
                 border-bottom-left-radius: 3px
               .nav-tap
-                font-size: $font-size-medium-x
+                font-size: $font-size-medium16
                 padding: 0 70px 0 20px
                 .small-title
                   min-width: 84px
@@ -472,10 +450,8 @@
               background: $color-menu-select
           &:hover
             background: $color-menu-select
-            border-left: 4px solid $color-nomal
         .nav-small-active
-          background: $color-menu-select
-          border-left: 4px solid $color-nomal
+          background: $color-nomal !important
     .small-hide
       width: 200px
       transition: all .2s

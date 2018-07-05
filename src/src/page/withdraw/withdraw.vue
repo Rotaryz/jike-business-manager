@@ -368,7 +368,7 @@
         no-wrap()
       &:first-child
         height: 7.01vh
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         position: relative
         .close
           cursor: pointer

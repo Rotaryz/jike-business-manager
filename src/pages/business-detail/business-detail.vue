@@ -289,7 +289,7 @@
   @import '~common/stylus/mixin'
   .shade-out-title
     background: #FAFAFA
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     padding-left: 30px
     display: flex
     height: 5.01vh
@@ -311,7 +311,7 @@
     .shade-right, .shade-left
       flex: 1
     .shade-border
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding-left: 30px
       display: flex
       height: 7.1vh
@@ -330,7 +330,7 @@
         border: 0.5px solid $color-line
       textarea.shade-text
         padding-top: 2px
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         box-sizing: border-box
         outline: none
       .shade-text
@@ -368,7 +368,7 @@
         min-width: 112px
         no-wrap()
       &:first-child
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         height: 7.01vh
         position: relative
         .close
@@ -387,7 +387,7 @@
       .amend
         position: absolute
         right: 30px
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         padding: 8px 18px
         line-height: 1
         col-center()

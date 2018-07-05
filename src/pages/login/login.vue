@@ -7,25 +7,24 @@
     </div>
     <div class="login-box">
       <p class="login-title">智慧改变销售</p>
-      <div class="user input-box" :class="{'input-height': focusPhone}">
-        <span class="input-icon"></span>
-        <input class="inputs input-height-item" value="asd" type="text"
-               placeholder="请输入用户名" v-model="user"
-               @click.stop="focusPhone = !focusPhone"
-               @blur="focusPhone = false"/>
+      <div class="login-content">
+        <div class="user input-box" :class="{'input-height': focusPhone}">
+          <span class="input-icon"></span>
+          <input class="inputs" value="asd" type="text"
+                 placeholder="请输入用户名" v-model="user" />
+        </div>
+        <div class="passward input-box" :class="{'input-height': focusPass}">
+          <span class="input-icon"></span>
+          <input class="inputs" type="password"
+                 placeholder="请输入密码" v-model="password" />
+        </div>
       </div>
-      <div class="passward input-box" :class="{'input-height': focusPass}">
-        <span class="input-icon"></span>
-        <input class="inputs input-height-item" type="password"
-               placeholder="请输入密码" v-model="password"
-               @click.stop="focusPass = !focusPass" @blur="focusPass = false"/>
-      </div>
-      <div class="remenber hand" @click="remenberPassWord">
-        <i class="check" :class="{'check-yes' : remenber}"></i>
-        <span class="tip">记住密码</span>
-      </div>
-      <div class="submit-no input-box" @click="login">
-        登陆
+      <!--<div class="remenber hand" @click="remenberPassWord">-->
+        <!--<i class="check" :class="{'check-yes' : remenber}"></i>-->
+        <!--<span class="tip">记住密码</span>-->
+      <!--</div>-->
+      <div class="submit-no" :class="{'submit-disable': !isLogin}" @click="login">
+        登录
       </div>
     </div>
     <toast ref="toast"></toast>
@@ -35,8 +34,9 @@
 <script type="text/ecmascript-6">
   import admins from 'api/admins'
   import Toast from 'components/toast/toast'
+
   export default {
-    data() {
+    data () {
       return {
         focusPass: false,
         focusPhone: false,
@@ -45,7 +45,7 @@
         remenber: true
       }
     },
-    created() {
+    created () {
       let token = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('token') ? sessionStorage.getItem('token') : false
       if (token) {
         location.href = '#/container/data'
@@ -56,15 +56,20 @@
         }
       }
     },
+    computed: {
+      isLogin() {
+        return this.phone && this.password
+      }
+    },
     methods: {
-      hideFocus() {
+      hideFocus () {
         this.focusPhone = false
         this.focusPass = false
       },
-      remenberPassWord() {
+      remenberPassWord () {
         this.remenber = !this.remenber
       },
-      login() {
+      login () {
         if (this.user === '') {
           this.$refs.toast.show('请输入用户名')
           return false
@@ -103,61 +108,83 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .login
-    display : flex
-    align-items : center
-    justify-content:center
+    height: 100vh
+    width: 100vw
+    display: flex
+    align-items: center
+    justify-content: center
     .bk
       height: 100vh
-      width: 100%
+      width: 100vw
       position: absolute
       bottom: 0
       left: 0
       background-size: cover
       background-image: url('./bg-login@1x.png')
-      background-repeat : no-repeat
+      background-repeat: no-repeat
     .logo-box
       position: absolute
-      left : 100px
+      left: 100px
       top: 58.2px
       display: flex
-      align-items : center
+      align-items: center
       .logo
         width: 42px
         height: 42px
       .title
         font-family: PingFangSC-Semibold
-        color: rgba(255,255,255,0.4)
-        margin-left : 10px
+        color: rgba(255, 255, 255, 0.4)
+        margin-left: 10px
         font-size: 36px
     .login-box
-      height: 28.22vw
-      width: 26.45vw
-      min-width: 386px
-      min-height: 416px
+      text-align :center
       .login-title
-
+        text-align: center
+        font-size: 32px
+        font-family: $fontFamilyLight
+        color: $color-white
+        position: relative
+        display :inline-block
+        &:before, &:after
+          col-center()
+          content: ''
+          height: 1px
+          width: 39px
+          background: $color-white
+        &:before
+          left: -54px
+        &:after
+          right: -54px
+      .login-content
+        background: $color-white
+        width : 468px
+        box-shadow: 0 0 10px 0 rgba(12,6,14,0.10);
+        border-radius: 3px
+        overflow :hidden
+        margin : 62px 0 30px
       .input-box
-        margin: 4.59% auto
-        height: 9.225%
-        width: 72.47%
+        width: 100%
+        height :80px
         font-size: $font-size-small
         position: relative
-        border: 2px solid $color-white
+        &:first-child
+          border-bottom : 1px solid $color-icon-line
         .inputs
-          text-indent: 8.856%
+          text-indent: 65px
           height: 100%
           width: 100%
-          border-radius: 3px
-          border: 1px solid #D1D1D1
+          color: $color-text
+          font-size :$font-size-medium14
+          font-family: $fontFamilyLight
           &::placeholder
             opacity: 1
             color: $color-text-little
         .input-icon
-          height: 44%
-          width: 6.01%
+          height: 20px
+          width: @height
           icon-image('icon-user')
           col-center()
-          left: 2.5%
+          left: 35px
           z-index: 100
       .passward
         .input-icon
@@ -189,16 +216,19 @@
           line-height: 1
           font-size: $font-size-small
           color: #9B9B9B
-      .submit-no
-        background: $color-nomal
-        color: $color-white
-        display: flex
-        align-items: center
-        justify-content: center
-        border-radius: 4px
-        &:hover
-          background: $color-hover
-        &:active
-          background: $color-nomal
-          border: 1px solid rgba(239, 112, 93, 0.30)
+  .submit-no
+    background: $color-nomal
+    color: $color-white
+    display: flex
+    height :50px
+    width : 468px
+    border-radius: 4px
+    position :relative
+    z-index:100
+    align-items :center
+    justify-content :center
+    font-size :$font-size-medium16
+    font-family :$fontFamilyLight
+  .submit-disable
+    background :$color-disable
 </style>

@@ -94,7 +94,7 @@
       margin-left: 0px
 
   .select-title
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     line-height: 17px
     no-wrap()
 
@@ -104,7 +104,7 @@
     margin-left: 10px
     border: 2px solid $color-white
     border-radius: 4px
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     color: $color-text-little
     transform: translateY(-25%)
     position: relative
@@ -181,7 +181,7 @@
           text-align: left
           height: 26px
           line-height: 26px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
           &:hover
             background: $color-big-background
     .admin-select-box-active

@@ -46,7 +46,7 @@ export default {
     background-color: rgba(0, 0, 0, .8)
     .content
       line-height: 20px
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       color: $color-white
 
 </style>

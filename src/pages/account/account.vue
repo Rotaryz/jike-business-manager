@@ -255,7 +255,7 @@ ba<template>
       display :inline-block
       white-space :nowrap
       color :$color-text-icon
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding :0 14px
       border : 0.5px solid $color-line
       height: 30px
@@ -294,7 +294,7 @@ ba<template>
       padding: 0 5.5vw 0 2.8vw
       .monty-title
         color: $color-text
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         display: flex
         justify-content: space-between
         margin: 2vh 0 2vh 0
@@ -347,7 +347,7 @@ ba<template>
           .list-item
             white-space: nowrap
             line-height: 16px
-            font-size: $font-size-medium
+            font-size: $font-size-medium14
       .list-text
         white-space: nowrap
         text-overflow: ellipsis
@@ -360,7 +360,7 @@ ba<template>
         .showDetail
           cursor: pointer
           height: 25px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
           padding: 8px 18px
           color: $color-nomal
           border-radius: 3px
@@ -369,7 +369,7 @@ ba<template>
   .shade-box
     .shade-border
       border-bottom: 1px solid #DADADA
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding-left: 30px
       height: 50px
       line-height: 50px
@@ -384,7 +384,7 @@ ba<template>
         width: 112px
         no-wrap()
       &:first-child
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         height: 60px
         line-height: 60px
         position: relative
@@ -424,7 +424,7 @@ ba<template>
       position: relative
       height: 30px
       line-height: 30px
-      font-size :$font-size-medium
+      font-size :$font-size-medium14
       width: 444px
       .block
         height: 100%
@@ -434,7 +434,7 @@ ba<template>
         top: 0
         left: 66px
       .tap-item
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         color: $color-text
         cursor: pointer
         line-height: 20px
@@ -455,14 +455,14 @@ ba<template>
           background: $color-nomal
     .selects
       display: flex
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       color: $color-text
       line-height: 30px
       transform: translateY(-1%)
       margin-left: 3.535vw
       .select-title
         no-wrap()
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         color: $color-text
       .select-box
         display: flex
@@ -493,7 +493,7 @@ ba<template>
       height: 30px
       margin-left: 3.535vw
       display: flex
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       .search-input
         height: 100%
         border: 1px solid $color-icon-line
@@ -518,7 +518,7 @@ ba<template>
         &:active
           background: $color-active
     .down-excel
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       height: 30px
       line-height: 30px
       padding : 0 22px

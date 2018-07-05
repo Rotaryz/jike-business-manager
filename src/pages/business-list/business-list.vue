@@ -93,7 +93,7 @@
             <div class="input-box" :class="{'input-height': heightType === 7}">
               <input class="shade-text input-height-item" type="text"
                      v-model="ultraPassword" name="change" @focus="isFocus(7)"
-                     @blur="heightType = -1"/>
+                     @blur="heightType = -1" />
             </div>
           </div>
           <div class="shade-border shade-tiem shade-img">
@@ -114,10 +114,11 @@
   import FormBox from 'components/form-box/form-box'
   import merchant from 'api/merchant'
   import home from 'api/home'
-  import {mixinBase} from 'common/mixin/base'
-  import {ERR_OK} from 'api/config'
+  import { mixinBase } from 'common/mixin/base'
+  import { ERR_OK } from 'api/config'
   import Toast from 'components/toast/toast'
   import AdminSelect from 'components/admin-select/admin-select'
+
   const titleList = ['商家账号', '商家名称', '商家角色', '商家类型', '用户数', '客户数', '订单数', '版本', '商家状态', '认证状态', '操作']
   const SELECT = [{
     title: '开通方式',
@@ -194,7 +195,7 @@
   }]
   export default {
     mixins: [mixinBase],
-    data() {
+    data () {
       return {
         mobile: '',
         bussFocus: false,
@@ -240,7 +241,7 @@
         isWithdrawal: true
       }
     },
-    created() {
+    created () {
       this.orderId = this.$route.query.order ? this.$route.query.order : ''
       this.goNUm = this.orderId ? 0 : 2
       //      未完成 ，，，判断审核的订单号
@@ -248,14 +249,14 @@
     },
     methods: {
 //      搜索
-      sreach() {
+      sreach () {
         this.showList()
       },
-      selectType(type, res) {
+      selectType (type, res) {
         this.selectList = res
         this.type = type
       },
-      setValue(res) {
+      setValue (res) {
         switch (this.type) {
           case 'open':
             this.openType = res.status
@@ -280,15 +281,15 @@
         this.$refs.order.beginPage()
         this.showList()
       },
-      showIndustrie(res) {
+      showIndustrie (res) {
         this.shopId = res
         this.showList()
       },
-      isFocus(num) {
+      isFocus (num) {
         this.heightType = num
       },
 
-      merchantMessage(id) {
+      merchantMessage (id) {
         let date = this.riQi(this.merchantDetail.expiration_time)
         let reg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
         if (!reg.test(this.merchantDetail.mobile)) {
@@ -314,8 +315,8 @@
           this.$refs.order.showContent(res.message)
         })
       },
-//      冻结
-      frost(res) {
+//       冻结
+      frost (res) {
         res.is_disabled ? this.freezeText = '解冻' : this.freezeText = '冻结'
         this.merchantId = res.merchant_id
 //        this.isDisabledCode = res.is_disabled
@@ -329,7 +330,7 @@
         this.isWithdrawal = true
       },
       // 越权
-      ultraViresSub() {
+      ultraViresSub () {
         if (!this.ultraPassword) {
           this.$refs.order.showContent('请输入密码')
           return
@@ -353,7 +354,7 @@
         })
       },
 //      审核
-      audit(res) {
+      audit (res) {
         if (res.is_checked !== 2) {
           this.remarks = res.remark
           this.freezeText = '认证审核'
@@ -363,7 +364,7 @@
           this.isWithdrawal = true
         }
       },
-      isDeal() {
+      isDeal () {
         if (this.orderId && this.goNUm <= 1) {
           this.$router.push({path: 'notes', query: {status: 'license_audit'}})
           this.orderId = ''
@@ -373,7 +374,7 @@
         }
       },
 //      审核弹窗
-      withdrawal(code) {
+      withdrawal (code) {
         let data = {note: this.reamrk, merchant_id: this.merchantId}
         if (this.check && this.check !== 1) {
           let data = {remark: this.remarks, merchant_id: this.merchantId, check_status: code}
@@ -414,10 +415,10 @@
           })
         }
       },
-      hideShadeBox() {
+      hideShadeBox () {
         this.$refs.order.hideShade()
       },
-      showUltra(item) {
+      showUltra (item) {
         this.$refs.order.showShade()
         this.check = 3
         this.ultraPassword = ''
@@ -429,7 +430,7 @@
           }
         })
       },
-      showList(status = false) {
+      showList (status = false) {
         let data = {}
         data = Object.assign({}, {
           time: this.time,
@@ -463,19 +464,19 @@
           }
         })
       },
-      showDetail(id) {
+      showDetail (id) {
         this.$router.push({name: 'BusinessDetail', query: {id: id}})
         let title = sessionStorage.getItem('title').split(',')
         title.push('商家详情')
         sessionStorage.setItem('title', title)
       },
-      hideTime() {
+      hideTime () {
         this.merchanList.map((item) => {
           item.end_time = false
           return item
         })
       },
-      openShop(merchantId) {
+      openShop (merchantId) {
         this.merchantId = merchantId
         this.merchanList.map((item) => {
           if (item.merchant_id === merchantId) {
@@ -486,7 +487,7 @@
           return item
         })
       },
-      openServices(index) {
+      openServices (index) {
         if (this.endTime === '') {
           this.$refs.order.showContent('请选择开通时间')
           return
@@ -504,13 +505,13 @@
           this.$refs.order.showContent(res.message)
         })
       },
-      showHeight(index) {
+      showHeight (index) {
         this.heightIndex = index
       },
-      hideHeight() {
+      hideHeight () {
         this.heightIndex = -1
       },
-      checkTime(value, page) {
+      checkTime (value, page) {
         if (Array.isArray(value)) {
           this.time = value.join(',')
         } else {
@@ -520,11 +521,11 @@
         this.page = 1
         this.showList()
       },
-      addPage(page) {
+      addPage (page) {
         this.page = page
         this.showList()
       },
-      showCity(prams, page) {
+      showCity (prams, page) {
         this.address = this.$refs.order.infoData(prams)
         this.page = page
         this.showList()
@@ -563,7 +564,7 @@
         border-bottom: 1px solid $color-big-background
         .list-item
           line-height: 16px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
     .list-text
       white-space: nowrap
       text-overflow: ellipsis
@@ -611,7 +612,7 @@
     max-height: 540px
     overflow-y: auto
     .shade-border
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding-left: 30px
       display: flex
       height: 5.01vh
@@ -630,7 +631,7 @@
         border: 0.5px solid $color-line
       textarea.shade-text
         padding-top: 2px
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         box-sizing: border-box
         outline: none
       .shade-text
@@ -648,7 +649,7 @@
         min-width: 112px
         no-wrap()
       &:first-child
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         height: 7.01vh
         position: relative
         .close
@@ -667,7 +668,7 @@
       .amend
         position: absolute
         right: 30px
-        font-size: $font-size-medium
+        font-size: $font-size-medium14
         padding: 8px 18px
         line-height: 1
         col-center()
@@ -836,7 +837,7 @@
 
   .selects
     display: flex
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     color: $color-text
     line-height: 30px
     transform: translateY(-25%)
@@ -863,6 +864,7 @@
         border: none
         background: $color-nomal
         color: $color-white
+
   // 越权
   .ultra-vires-box
     all-center()
@@ -877,7 +879,7 @@
       align-items: center
       height: 5.2vw
       .submit
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         display: inline-block
         height: 2.5vw
         width: 11.45vw
@@ -890,14 +892,15 @@
           background: $color-hover
         &:active
           background: $color-nomal
+
   .select
-    margin-left:1.9625vw
+    margin-left: 1.9625vw
 
   .bl-mobile
-    display :flex
-    font-size: $font-size-medium
-    align-items :center
-    transform : translateY(-10px)
+    display: flex
+    font-size: $font-size-medium14
+    align-items: center
+    transform: translateY(-10px)
     margin-left: 2.3vw
     .selects-inpput-box
       margin-left: 10px

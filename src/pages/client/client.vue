@@ -198,7 +198,7 @@ export default {
         border-bottom: 1px solid $color-big-background
         .list-item
           line-height: 16px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
     .list-text
       white-space: nowrap
       text-overflow: ellipsis
@@ -225,7 +225,7 @@ export default {
   .shade-box
     .shade-border
       border-bottom :1px solid $color-icon-line
-      font-size :$font-size-medium
+      font-size :$font-size-medium14
       padding-left :30px
       display :flex
       height :5.01vh
@@ -235,7 +235,7 @@ export default {
         width :112px
         no-wrap()
       &:first-child
-        font-size :$font-size-medium-x
+        font-size :$font-size-medium16
         height :7.01vh
         position: relative
         .close
@@ -300,7 +300,7 @@ export default {
         border :1px solid $color-text-icon
   .selects
     display :flex
-    font-size :$font-size-medium
+    font-size :$font-size-medium14
     color :$color-text
     line-height :30px
     transform: translateY(-25%)

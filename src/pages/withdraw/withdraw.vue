@@ -336,7 +336,7 @@
         .list-item
           cursor: pointer
           line-height: 16px
-          font-size: $font-size-medium
+          font-size: $font-size-medium14
           .list-none
             no-wrap()
     .list-text
@@ -367,7 +367,7 @@
   .shade-box
     .shade-border
       border-bottom: 1px solid $color-icon-line
-      font-size: $font-size-medium
+      font-size: $font-size-medium14
       padding-left: 30px
       display: flex
       height: 5.01vh
@@ -378,7 +378,7 @@
         no-wrap()
       &:first-child
         height: 7.01vh
-        font-size: $font-size-medium-x
+        font-size: $font-size-medium16
         position: relative
         .close
           cursor: pointer
@@ -434,7 +434,7 @@
 
   .selects
     display: flex
-    font-size: $font-size-medium
+    font-size: $font-size-medium14
     color: $color-text
     line-height: 30px
     margin-left: 3.535vw

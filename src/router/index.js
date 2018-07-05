@@ -6,10 +6,10 @@ Vue.use(Router)
 // const Login = () => import('pages/login/login') => 示例写法
 const Login = () => import('pages/login/login')
 const Container = () => import('pages/container/container')
-const Data = () => import('pages/data/data')// 数据
-const Order = () => import('pages/order/order')
-const OrderInquiry = () => import('pages/monies-inquiry/monies-inquiry')
-const Client = () => import('pages/client/client')
+const Product = () => import('pages/product/product')// 数据
+const OfficialNetwork = () => import('pages/official-network/official-network')
+const ProductManagement = () => import('pages/product-management/product-management')
+const AccountCenter = () => import('pages/account-center/account-center')
 const BusinessList = () => import('pages/business-list/business-list')
 const BusinessGeneral = () => import('pages/business-general/business-general')
 const Account = () => import('pages/account/account')
@@ -21,7 +21,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/container'
     },
     {
       path: '/login',
@@ -33,14 +33,14 @@ export default new Router({
       name: 'Container',
       component: Container,
       children: [{
-        path: 'data',
-        component: Data
+        path: 'product',
+        component: Product
       }, {
-        path: 'order',
-        component: Order
+        path: 'officialNetwork',
+        component: OfficialNetwork
       }, {
-        path: 'moniesInquiry',
-        component: OrderInquiry
+        path: 'productManagement',
+        component: ProductManagement
       }, {
         path: 'businessList',
         component: BusinessList
@@ -52,8 +52,8 @@ export default new Router({
         path: 'businessDetail',
         component: BusinessDetail
       }, {
-        path: 'client',
-        component: Client
+        path: 'accountCenter',
+        component: AccountCenter
       }, {
         path: 'account',
         component: Account
