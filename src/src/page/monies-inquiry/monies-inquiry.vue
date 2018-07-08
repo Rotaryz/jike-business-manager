@@ -183,7 +183,7 @@
   const ALL = [{title: '全部', status: 1}]
   const PAY = [{title: '全部', status: ''}, {title: '待支付', status: 0}, {title: '已支付', status: 1}]
   const ALLIANCE = [{title: '全部', status: ''}, {title: '待支付', status: 0}, {title: '已支付', status: 1}, {title: '商家已确认', status: 2}, {title: '拒绝后已退款', status: 3}, {title: '过期退款', status: 4}]
-  const TOKEN = localStorage.getItem('token') || sessionStorage.getItem('token')
+  const TOKEN = localStorage.getItem('business-token') || sessionStorage.getItem('business-token')
   let select = [{
     title: '业务类型',
     type: 'business',

@@ -11,7 +11,7 @@ import 'common/stylus/index.styl'
 http.setDefaults()
 
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   router,
   render: h => h(App)

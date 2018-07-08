@@ -1,6 +1,10 @@
 'use strict'
 import axios from 'axios'
 import {BASE_URL} from 'api/config'
+// import VueRouter from 'vue-router'
+import _this from '../../main'
+
+// const router = new VueRouter()
 
 const TIME_OUT = 10000
 const COMMON_HEADER = {}
@@ -43,9 +47,8 @@ function checkCode(res) {
   if (res.data && (res.data.code !== ERR_OK)) {
     switch (res.data.code) {
       case TIME_OUT:
-        localStorage.removeItem('token')
-        sessionStorage.removeItem('token')
-        location.href = '#/login'
+        localStorage.removeItem('business-token')
+        _this.$router.push('/login')
         break
     }
     // 可以进行switch操作，根据返回的code进行相对应的操作，然后抛异常
@@ -70,7 +73,7 @@ function requestException(res) {
 
 export default {
   setDefaults() {
-    let authorization = localStorage.getItem('token') || sessionStorage.getItem('token')
+    let authorization = localStorage.getItem('business-token') || sessionStorage.getItem('business-token')
     axios.defaults.headers.common['Authorization'] = authorization
     axios.defaults.baseURL = BASE_URL.api
   },

@@ -66,8 +66,7 @@
       },
       isLogout() {
         localStorage.clear()
-        sessionStorage.clear()
-        location.href = '#/login'
+        this.$router.push({path: '/'})
       },
       showHeight() {
         this.showOut = true

@@ -77,7 +77,7 @@
       </div>
     </div>
     <transition name="fade">
-      <div class="shade-win" @click.stop="hideShade" v-show="!isShade">
+      <div class="shade-win" @click.stop="hideShade" v-show="isShade">
         <div class="shade-detail" @click.stop>
           <slot name="shade-box"></slot>
         </div>
@@ -201,7 +201,6 @@
       }
     },
     created () {
-      this.showCity()
       window.onkeydown = (e) => {
         if (e.keyCode === 13) {
           if (this.pageInput !== '') {
@@ -239,8 +238,7 @@
       },
       isLogout () {
         localStorage.clear()
-        sessionStorage.clear()
-        location.href = '#/login'
+        this.$router.push({path: '/'})
       },
       showHeight () {
         this.showOut = true

@@ -20,8 +20,8 @@
         </div>
       </div>
       <!--<div class="remenber hand" @click="remenberPassWord">-->
-        <!--<i class="check" :class="{'check-yes' : remenber}"></i>-->
-        <!--<span class="tip">记住密码</span>-->
+      <!--<i class="check" :class="{'check-yes' : remenber}"></i>-->
+      <!--<span class="tip">记住密码</span>-->
       <!--</div>-->
       <div class="submit-no" :class="{'submit-disable': !isLogin}" @click="login">
         登录
@@ -32,7 +32,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import admins from 'api/admins'
+  import {Admin} from 'api'
   import Toast from 'components/toast/toast'
 
   export default {
@@ -46,9 +46,9 @@
       }
     },
     created () {
-      let token = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('token') ? sessionStorage.getItem('token') : false
+      let token = localStorage.getItem('business-token') || false
       if (token) {
-        location.href = '#/container/data'
+       this.$router.push('container/officialNetwork')
       }
       window.onkeydown = (e) => {
         if (e.keyCode === 13) {
@@ -57,8 +57,8 @@
       }
     },
     computed: {
-      isLogin() {
-        return this.phone && this.password
+      isLogin () {
+        return this.user && this.password
       }
     },
     methods: {
@@ -77,20 +77,15 @@
           this.$refs.toast.show('请输入密码')
           return false
         }
-        let data = {username: this.user, password: this.password}
-        admins.login(data).then((res) => {
+        let data = {mobile: this.user, password: this.password}
+        Admin.adminLogin(data).then((res) => {
           if (!res.error) {
             let data = res.data
             this.$refs.toast.show('登陆成功')
-            if (this.remenber) {
-              localStorage.setItem('token', data.access_token)
-              localStorage.setItem('userName', data.admin_info.username)
-            } else {
-              sessionStorage.setItem('token', data.access_token)
-              sessionStorage.setItem('userName', data.admin_info.username)
-            }
+            localStorage.setItem('business-token', data.access_token)
+            localStorage.setItem('userName', data.merchant_info.username)
             setTimeout(() => {
-              location.href = '#/container/data'
+              this.$router.push('container/officialNetwork')
             }, 500)
           } else if (res.error) {
             this.$refs.toast.show(res.message)
@@ -137,14 +132,14 @@
         margin-left: 10px
         font-size: 36px
     .login-box
-      text-align :center
+      text-align: center
       .login-title
         text-align: center
         font-size: 32px
         font-family: $fontFamilyLight
         color: $color-white
         position: relative
-        display :inline-block
+        display: inline-block
         &:before, &:after
           col-center()
           content: ''
@@ -157,24 +152,24 @@
           right: -54px
       .login-content
         background: $color-white
-        width : 468px
-        box-shadow: 0 0 10px 0 rgba(12,6,14,0.10);
+        width: 468px
+        box-shadow: 0 0 10px 0 rgba(12, 6, 14, 0.10);
         border-radius: 3px
-        overflow :hidden
-        margin : 62px 0 30px
+        overflow: hidden
+        margin: 62px 0 30px
       .input-box
         width: 100%
-        height :80px
+        height: 80px
         font-size: $font-size-small
         position: relative
         &:first-child
-          border-bottom : 1px solid $color-icon-line
+          border-bottom: 1px solid $color-icon-line
         .inputs
           text-indent: 65px
           height: 100%
           width: 100%
           color: $color-text
-          font-size :$font-size-medium14
+          font-size: $font-size-medium14
           font-family: $fontFamilyLight
           &::placeholder
             opacity: 1
@@ -216,19 +211,21 @@
           line-height: 1
           font-size: $font-size-small
           color: #9B9B9B
+
   .submit-no
     background: $color-nomal
     color: $color-white
     display: flex
-    height :50px
-    width : 468px
+    height: 50px
+    width: 468px
     border-radius: 4px
-    position :relative
-    z-index:100
-    align-items :center
-    justify-content :center
-    font-size :$font-size-medium16
-    font-family :$fontFamilyLight
+    position: relative
+    z-index: 100
+    align-items: center
+    justify-content: center
+    font-size: $font-size-medium16
+    font-family: $fontFamilyLight
+
   .submit-disable
-    background :$color-disable
+    background: $color-disable
 </style>

@@ -10,18 +10,18 @@ const Product = () => import('pages/product/product')// 数据
 const OfficialNetwork = () => import('pages/official-network/official-network')
 const ProductManagement = () => import('pages/product-management/product-management')
 const AccountCenter = () => import('pages/account-center/account-center')
-const BusinessList = () => import('pages/business-list/business-list')
-const BusinessGeneral = () => import('pages/business-general/business-general')
-const Account = () => import('pages/account/account')
-const Withdraw = () => import('pages/withdraw/withdraw')
-const Notes = () => import('pages/notes/notes')
-const BusinessDetail = () => import('pages/business-detail/business-detail')
+const OrganizationalStructure = () => import('pages/organizational-structure/organizational-structure')
+const AddEmployees = () => import('pages/add-employees/add-employees')
+const AuthorityManagement = () => import('pages/authority-management/authority-management')
+const AuthorizationManagement = () => import('pages/authorization-management/authorization-management')
+const AuthorizationDetail = () => import('pages/authorization-detail/authorization-detail')
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
-      redirect: '/container'
+      redirect: '/login'
     },
     {
       path: '/login',
@@ -34,35 +34,55 @@ export default new Router({
       component: Container,
       children: [{
         path: 'product',
-        component: Product
+        component: Product, // 产品列表
+        meta: {
+          title: '小程序管理,公司产品'
+        }
       }, {
         path: 'officialNetwork',
-        component: OfficialNetwork
+        component: OfficialNetwork, // 官网
+        meta: {
+          title: '小程序管理,公司官网'
+        }
       }, {
         path: 'productManagement',
-        component: ProductManagement
+        component: ProductManagement, // 产品新建
+        meta: {
+          title: '小程序管理,公司产品,添加产品'
+        }
       }, {
-        path: 'businessList',
-        component: BusinessList
+        path: 'organizationalStructure', // 组织架构
+        component: OrganizationalStructure,
+        meta: {
+          title: '员工管理,组织架构'
+        }
       }, {
-        path: 'businessGeneral',
-        component: BusinessGeneral
+        path: 'authorityManagement', // 员工新建
+        component: AuthorityManagement,
+        meta: {
+          title: '员工管理,权限管理'
+        }
       }, {
-        name: 'BusinessDetail',
-        path: 'businessDetail',
-        component: BusinessDetail
+        path: 'authorizationManagement', // 授权管理
+        component: AuthorizationManagement,
+        meta: {
+          title: '授权管理'
+        }
       }, {
-        path: 'accountCenter',
-        component: AccountCenter
+        path: 'accountCenter', // 账户中心
+        component: AccountCenter,
+        meta: {
+          title: '账户中心'
+        }
       }, {
-        path: 'account',
-        component: Account
+        path: 'addEmployees', // 添加员工
+        component: AddEmployees,
+        meta: {
+          title: '员工管理,组织架构,员工编辑'
+        }
       }, {
-        path: 'withdraw',
-        component: Withdraw
-      }, {
-        path: 'notes',
-        component: Notes
+        path: 'authorizationDetail', // 授权回调
+        component: AuthorizationDetail
       }]
     }
   ]

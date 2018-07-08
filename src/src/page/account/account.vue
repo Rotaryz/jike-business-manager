@@ -65,7 +65,7 @@
   const TITLELIST = ['支付时间', '收/支', '业务类型', '交易金额']
   const BUSINESS = [{title: '全部', status: ''}, {title: '优惠券', status: 0}, {title: '门店年费', status: 3}, {title: '红包创建', status: 2}, {title: '买单', status: 5}, {title: '联盟投放', status: 6}, {title: '礼包', status: 7}]
   const BUSINESS2 = [{title: '全部', status: ''}, {title: '门店提现', status: 1}, {title: '顾客提现', status: 4}]
-  const TOKEN = localStorage.getItem('token') || sessionStorage.getItem('token')
+  const TOKEN = localStorage.getItem('business-token') || sessionStorage.getItem('business-token')
   const SELECT = [{
     title: '开通方式',
     type: 'open',

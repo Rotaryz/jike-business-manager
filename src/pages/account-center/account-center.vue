@@ -1,5 +1,5 @@
 <template>
-  <form-box>
+  <form-box :pageShow="pageShow">
     <div slot="form-list" class="account-center">
       <div class="account-center-header">
         <span class="account-center-title">账户信息</span>
@@ -84,6 +84,11 @@
 
   export default {
     name: 'account-center',
+    data() {
+      return {
+        pageShow: false
+      }
+    },
     components: {
       'form-box': FormBox
     }

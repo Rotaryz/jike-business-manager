@@ -8,25 +8,24 @@
       <ul class="nav-big">
         <li class="nav-item" v-for="(item , index) in navList" :key="index"
             @click="showChild(index)" :style="{'height':item.showHeight+'px'}">
-          <a :href="item.url" class="nav-tap" :class="{'nav-tap-active':bigChild === index,'nav-item-no-border':item.children.length > 1}">
+          <router-link :to="{path: item.url}" class="nav-tap" :class="{'nav-tap-active':bigChild === index,'nav-item-no-border':item.children.length > 1}">
             <span class="nav-icon"><img :src="item.icon" class="nav-pic"></span>
             <div class="nav-title" v-show="!showAnimation">
             <span v-for="(items , index) in item.title" :key="index">{{items}}
             </span>
             </div>
             <i class="nav" :class="{'nav-active': item.showHeight !== 60}" v-show="!showAnimation"></i>
-          </a>
+          </router-link>
           <ul class="nav-big-child" v-if="item.children"
               v-show="item.children.length > 1">
             <li class="nav-item" v-for="(items , idx) in item.children" :key="idx" @click.stop="bigChildren(idx)" v-if="index === 0 && idx === 0 || index !== 0">
-              <a :href="items.url" class="nav-tap" :class="item.childrenIndex === idx ? 'nav-big-active' : ''">
+              <router-link :to="{path: items.url}" class="nav-tap" :class="item.childrenIndex === idx ? 'nav-big-active' : ''">
                 <span class="nav-icon"><img src=""></span>
                 <div class="nav-title">
-                 <span v-for="(child , index) in items.title" :key="index">{{
-                   child}}
+                 <span v-for="(child , index) in items.title" :key="index">{{child}}
             </span>
                 </div>
-              </a>
+              </router-link>
             </li>
           </ul>
         </li>
@@ -47,9 +46,9 @@
           <div class="nav-small-box">
             <ul class="nav-small-child" v-if="item.children" v-show="index === hoverIndex">
               <li class="nav-item" v-for="(items , idx) in item.children" :class="hoverChildIndex === idx ? 'nav-item-active' : ''" :key="idx" @click.stop="hoverDetail(idx,index)" v-if="index === 0 && idx === 0 || index !== 0">
-                <a :href="items.url" class="nav-tap">
+                <router-link :to="{path: items.url}" class="nav-tap">
                   <div class="small-title">{{items.title}}</div>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -74,48 +73,48 @@
       showHeight: HEIGHT
     }, {
       title: '小程序管理',
-      url: '#/container/officialNetwork',
+      url: 'officialNetwork',
       icon: require('./icon-applet_selected@2x.png'),
       childrenIndex: -1,
       children: [{
         title: '公司官网',
-        url: '#/container/officialNetwork'
+        url: 'officialNetwork'
       }, {
         title: '公司产品',
-        url: '#/container/product'
+        url: 'product'
       }],
       showHeight: HEIGHT
     }, {
       title: '员工管理',
-      url: '#/container/businessList',
+      url: 'organizationalStructure',
       icon: require('./icon-staff@2x.png'),
       childrenIndex: -1,
       children: [{
         title: '组织架构',
-        url: '#/container/businessList'
+        url: 'organizationalStructure'
       }, {
         title: '权限管理',
-        url: '#/container/businessGeneral'
+        url: 'authorityManagement'
       }],
       showHeight: HEIGHT
     }, {
       title: '授权管理',
       icon: require('./icon-authorization@2x.png'),
-      url: '#/container/client',
+      url: 'authorizationManagement',
       childrenIndex: -1,
       children: [{
         title: '授权管理',
-        url: '#/container/client'
+        url: 'authorizationManagement'
       }],
       showHeight: HEIGHT
     }, {
       title: '账户中心',
       icon: require('./icon-account@2x.png'),
-      url: '#/container/accountCenter',
+      url: 'accountCenter',
       childrenIndex: -1,
       children: [{
         title: '账户中心',
-        url: '#/container/accountCenter'
+        url: 'accountCenter'
       }],
       showHeight: HEIGHT
     }]
@@ -124,7 +123,7 @@
   //        url: '#/container/order'
   //      }
   export default {
-    data() {
+    data () {
       return {
         smallIndex: 0,
         title: '商家管理平台',
@@ -141,17 +140,22 @@
         sortTimer: null
       }
     },
-    created() {
+    created () {
       let path = this.$route.matched[1].path
       this.info(path)
     },
     methods: {
-      info(path) {
+      info (path) {
         //     待处理
-        if (path === '/container/businessDetail') {
-          this.showChild(2)
-          this.bigChildren(0)
-          return false
+        switch (path) {
+          case '/container/productManagement':
+            this.showChild(2)
+            this.bigChildren(1)
+            break
+          case '/container/addEmployees':
+            this.showChild(2)
+            this.bigChildren(0)
+            break
         }
         let rootType = path.split('/')
         let type = rootType[rootType.length - 1]
@@ -161,7 +165,6 @@
               if (items.url.includes(type)) {
                 this.showChild(idx)
                 this.bigChildren(index)
-                sessionStorage.setItem('title', [item.title, items.title])
               } else {
                 item.showHeight = HEIGHT
               }
@@ -169,12 +172,11 @@
           } else {
             if (item.url.includes(type)) {
               this.showChild(idx)
-              sessionStorage.setItem('title', [item.title])
             }
           }
         })
       },
-      showChild(index, status = true) {
+      showChild (index, status = true) {
         this.smallIndex = index
         clearInterval(this.timer)
         if (this.navList[index].children.length === 1) {
@@ -189,14 +191,11 @@
             }, 30)
           }
           this.bigChild = index
-          sessionStorage.setItem('title', [this.navList[index].title])
         } else if (this.navList[index].children.length > 1) {
-          console.log('fdf')
           clearInterval(this.timer)
           let childCode = this.navList[index].childrenIndex === -1 ? 0 : this.navList[index].childrenIndex
           this.recodIndex = index
           this.navList[this.recodIndex].childrenIndex = childCode
-          sessionStorage.setItem('title', [this.navList[index].title, this.navList[index].children[childCode].title])
           this.bigChild = -1
           clearInterval(this.timer)
           for (let i = 0; i < this.navList.length; i++) {
@@ -239,21 +238,19 @@
           }
         }
       },
-      bigChildren(index) {
+      bigChildren (index) {
         this.navList[this.recodIndex].childrenIndex = index
         let num = this.recodIndex
         this.navList[num].url = this.navList[num].children[this.navList[num].childrenIndex].url
-        let arr = [this.navList[this.recodIndex].title, this.navList[this.recodIndex].children[index].title]
-        sessionStorage.setItem('title', arr)
       },
-      hoverChild(index) {
+      hoverChild (index) {
         this.hoverIndex = index
         this.hoverChildIndex = this.navList[index].childrenIndex
       },
-      hideHover() {
+      hideHover () {
         this.hoverIndex = -1
       },
-      hoverDetail(index, parent) {
+      hoverDetail (index, parent) {
         this.smallIndex = parent
         this.hoverChildIndex = index
         this.hoverIndex = parent
@@ -270,7 +267,7 @@
         }
         this.showChild(parent)
       },
-      isShowBig() {
+      isShowBig () {
         this.showAnimation = !this.showAnimation
         let marWidth = 0
         this.showAnimation ? marWidth = 79 : marWidth = 200
@@ -300,11 +297,10 @@
       }
     },
     watch: {
-      '$route'(to, form) {
-        if (form.path.includes('notes')) {
-          this.info(to.matched[1].path)
-          sessionStorage.getItem('title')
-        }
+      '$route' (to, form) {
+        let title = to.meta.title
+        // let item = this.navList.find(item => item.url)
+        sessionStorage.setItem('title', title)
       }
     }
   }
@@ -319,7 +315,7 @@
     color: $color-white
     height: 100vh
     position: relative
-    z-index : 1000
+    z-index: 1000
     .big-show
       width: 200px
       .herder

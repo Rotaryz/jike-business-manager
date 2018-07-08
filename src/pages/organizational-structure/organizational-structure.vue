@@ -2,11 +2,11 @@
   <form-box ref="formBox" :pageDtail="pageDtail" @addPage="_addPage">
     <div slot="form-list" class="form-list">
       <div class="tool">
-        <router-link to="productManagement" class="tool-add hand">+ 添加产品</router-link>
-        <div class="up hand" @click="_onProduct">{{status ? '下架' : '上架'}}</div>
-        <div class="up hand" @click="_delProduct">删除</div>
+        <router-link to="addEmployees" class="tool-add hand">+ 添加成员</router-link>
+        <div class="up hand" @click="_syncUser">同步</div>
+        <div class="up hand" @click="_delAll">删除</div>
         <div class="tool-search">
-          <input type="text" placeholder="请输入产品名称" class="search-input" v-model="title">
+          <input type="text" placeholder="请输入员工姓名" class="search-input" v-model="name">
           <div class="search-box hand" @click="_search">
             <img src="./icon-search@2x.png" class="search-icon">
           </div>
@@ -16,39 +16,32 @@
         <div class="check-box">
           <span class="check-item hand" :class="{'check-ok': checkAll}" @click="_getAll(checkAll)"></span>
         </div>
-        <div class="list-item" :class="{hand: item === '状态'}" v-for="(item, index) in titleList" :key="index" @click="_showStatusBox(item)">
+        <div class="list-item" v-for="(item, index) in titleList" :key="index">
           {{item}}
-          <img src="./icon-down@2x.png" class="down-icon" :class="{'down-icon-active': showStatus}" v-if="item === '状态'">
-          <transition name="fade">
-            <ul class="status-box" v-if="item === '状态'" v-show="showStatus" @click.stop="">
-              <li class="status-item" @click.stop="_checkStatue(1)">已上架产品</li>
-              <li class="status-item" @click.stop="_checkStatue(0)">已下架产品</li>
-            </ul>
-          </transition>
         </div>
       </div>
       <ul class="list">
-        <li class="list-box" v-for="(item, index) in goodsList" :key="index">
+        <li class="list-box" v-for="(item, index) in userList" :key="index">
           <div class="check-box">
             <span class="check-item hand" :class="{'check-ok': item.check}" @click="_checkItem(index)"></span>
           </div>
           <div class="list-item list-text">
-            <img class="list-item-img" :src="item.image_url">
+            <img class="list-item-img" :src="item.avatar">
           </div>
-          <div class="list-item list-text">{{item.title}}</div>
-          <div class="list-item list-text">{{item.updated_at}}</div>
-          <div class="list-item list-text">{{item.merchant_id}}</div>
-          <div class="list-item list-text">{{item.is_online ? '已上架' : '已下架'}}</div>
+          <div class="list-item list-text">{{item.name}}</div>
+          <div class="list-item list-text">{{item.position}}</div>
+          <div class="list-item list-text">{{item.department}}</div>
+          <div class="list-item list-text">{{item.mobile}}</div>
           <div class="list-item"><span class="showDetail"><span @click="_upProduct(item.id)">编辑<span class="line">|</span></span><span class="audit" @click="_delItem(item.id)">删除</span></span></div>
         </li>
       </ul>
     </div>
     <div slot="shade-box" class="shade">
       <p class="shade-title">提示<span class="close" @click="_hideShade">&times;</span></p>
-      <p class="shade-tip">{{isDelete ? '是否删除选中产品' : '是否下架'}}</p>
+      <p class="shade-tip">是否删除选员工</p>
       <div class="shade-btn">
         <div class="share-btn-item hare-btn-white hand" @click="_hideShade">取消</div>
-        <div class="share-btn-item hare-btn-orgin hand" @click="_doubelCheck">{{isDelete ? '删除' : '下架'}}</div>
+        <div class="share-btn-item hare-btn-orgin hand" @click="_doubelCheck">删除</div>
       </div>
     </div>
   </form-box>
@@ -56,38 +49,64 @@
 
 <script>
   import FormBox from 'components/form-box/form-box'
-  import { Goods } from 'api'
+  import { Employee } from 'api'
   import { ERR_OK } from 'api/config'
+  import Toast from 'components/toast/toast'
 
-  const TITLELIST = ['产品图片', '产品名称', '修改时间', '发布者', '状态', '操作']
+  const TITLELIST = ['头像', '姓名', '职位', '部门', '手机', '操作']
 
   export default {
-    name: 'product',
+    name: 'organizational-structure',
     data () {
       return {
-        titleList: TITLELIST,
-        page: 1,
-        goodsList: [],
-        upList: [],
-        title: '',
-        status: 1,
         pageDtail: [{total: 1, per_page: 10, total_page: 1}],
-        showStatus: false,
-        isDelete: false,
+        titleList: TITLELIST,
+        name: '',
+        userList: [],
+        upList: [],
+        page: 1,
         delId: null
       }
     },
     created () {
-      this._goodsList('')
+      this._getList()
     },
     methods: {
-      _checkStatue (status) {
-        this.status = status
-        this._goodsList()
-        this.showStatus = false
+      _showShade () {
+        this.$refs.formBox.showShade()
+      },
+      _hideShade () {
+        this.delId = null
+        this.$refs.formBox.hideShade()
+      },
+      _delItem (id) {
+        this.delId = id
+        this.$refs.formBox.showShade()
+      },
+      _doubelCheck () {
+        let string = this.delId ? this.delId : this.upList.join(',')
+        Employee.deleteUser({user_ids: string}).then((res) => {
+          if (res.error === ERR_OK) {
+            this._getList()
+            this._hideShade()
+          }
+          this.$refs.formBox.showContent(res.message)
+        })
+      },
+      _delAll () {
+        this.delId = null
+        this._showShade()
+      },
+      _search () {
+        this.page = 1
+        this.$refs.formBox.beginPage()
+        this._getList()
+      },
+      _upProduct (id) {
+        this.$router.push({path: 'addEmployees', query: {id}})
       },
       _getAll (status) {
-        this.goodsList.map((item) => {
+        this.userList.map((item) => {
           if (!status) {
             this.upList.push(item.id)
           } else {
@@ -97,7 +116,7 @@
         })
       },
       _checkItem (index) {
-        let item = this.goodsList[index]
+        let item = this.userList[index]
         item.check = !item.check
         if (item.check) {
           this.upList.push(item.id)
@@ -105,56 +124,11 @@
           let idIndex = this.upList.findIndex((items) => items === item.id)
           this.upList.splice(idIndex, 1)
         }
-        this.goodsList.splice(index, 1, item)
+        this.userList.splice(index, 1, item)
       },
-      _delItem (id) {
-        this.isDelete = true
-        this._showShade()
-        this.delId = id
-        // 单独删除
-      },
-      _showStatusBox (item) {
-        if (item === '状态') {
-          this.showStatus = !this.showStatus
-        }
-        this.isDelete = false
-      },
-      _onProduct (text) {
-        if (!this.upList.length) {
-          this.$refs.formBox.showContent('请选择商品')
-          return
-        }
-        this.isDelete = false
-        if (this.status === 0) {
-          this._batch()
-          return
-        }
-        this._showShade()
-        console.log('上架商品')
-      },
-      _delProduct () {
-        if (!this.upList.length) {
-          this.$refs.formBox.showContent('请选择商品')
-          return
-        }
-        this.isDelete = true
-        this._showShade()
-        console.log('删除商品')
-      },
-      _batch () {
-        let status = this.status ? 0 : 1
-        let data = {ids: this.upList, is_online: status, is_delete: this.isDelete}
-        Goods.goodsBatchUpdate(data).then((res) => {
-          if (res.error === ERR_OK) {
-            this.$refs.formBox.showContent('批量操作完成')
-            this._goodsList()
-            this._hideShade()
-          }
-        })
-      },
-      _goodsList () {
-        let data = {status: this.status, page: this.page, title: this.title, limit: 10}
-        Goods.goodsList(data).then((res) => {
+      _getList () {
+        let data = {name: this.name, page: this.page, limit: 10}
+        Employee.userList(data).then((res) => {
           if (res.error === ERR_OK) {
             let pages = res.meta
             this.pageDtail = [{
@@ -166,57 +140,37 @@
               item.check = false
               return item
             })
-            this.goodsList = json
+            this.userList = json
+            console.log(this.userList)
           }
-          // console.log(res)
         })
       },
-      _showShade () {
-        this.$refs.formBox.showShade()
-      },
-      _hideShade () {
-        this.delId = null
-        this.$refs.formBox.hideShade()
-      },
-      _search () {
-        this.page = 1
-        this.$refs.formBox.beginPage()
-        this._goodsList()
-      },
-      _upProduct (id) {
-        this.$router.push({path: 'productManagement', query: {id}})
-      },
-      _doubelCheck () {
-        if (this.delId) {
-          Goods.delGoods(this.delId).then((res) => {
-            if (res.error === ERR_OK) {
-              this.$refs.formBox.showContent('成功删除商品')
-              this._hideShade()
-              this._goodsList()
-            }
-            console.log(res)
-          })
-          return
-        }
-        this._batch()
+      _syncUser () {
+        Employee.syncUser().then((res) => {
+          this.$refs.formBox.showContent(res.message)
+          if (res.error === ERR_OK) {
+            this._getList()
+          }
+        })
       },
       _addPage (page) {
         this.page = page
-        this._goodsList()
+        this._getList()
       }
     },
     computed: {
       checkAll () {
-        if (!this.goodsList.length) {
+        if (!this.userList.length) {
           return false
         }
-        let index = this.goodsList.findIndex((item) => item.check === false)
+        let index = this.userList.findIndex((item) => item.check === false)
         let status = index === -1
         return status
       }
     },
     components: {
-      'form-box': FormBox
+      'form-box': FormBox,
+      'toast': Toast
     }
   }
 </script>
@@ -290,7 +244,7 @@
       text-overflow: ellipsis
       overflow: hidden
     .list-item-img
-      width: 60px
+      width: 40px
       height: 40px
       border: none
       display: block
@@ -300,7 +254,6 @@
         margin-left: 30px
         display: inline-block
         width: 14px
-        box-sizing: border-box
         height: 14px
         border: 1px solid #D9D9D9
       .check-ok
@@ -313,25 +266,14 @@
       .down-icon
         width: 13px
         margin-left: 4px
-        transform: rotate(0deg)
-        transform-origin: 50%
-        transition : all 0.3s
-      .down-icon-active
-        transform: rotate(180deg)
-        transform-origin: 50%
-        transition : all 0.3s
       .status-box
         box-shadow: 0 1px 5px 0 rgba(12, 6, 14, 0.20)
         border-radius: 3px
         position: absolute
         z-index: 1000
-        bottom: -80px
+        bottom: -105px
         padding: 10px 0
         background: $color-white
-        &.fade-enter, &.fade-leave-to
-          opacity: 0
-        &.fade-enter-to, &.fade-leave-to
-          transition: opacity .2s ease-in-out
         .status-item
           background: $color-white
           font-size: $font-size-medium14
@@ -369,11 +311,12 @@
 
   .shade
     height: 261px
-    .shade-tip
-      text-indent: 36px
-      margin-top: 46px
-      font-size: $font-size-medium14
-      color: $color-text
+
+  .shade-tip
+    text-indent: 36px
+    margin-top: 46px
+    font-size: $font-size-medium14
+    color: $color-text
 
   .shade-title
     text-indent: 30px

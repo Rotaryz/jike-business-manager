@@ -43,7 +43,7 @@
       }
     },
     created() {
-      let token = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('token') ? sessionStorage.getItem('token') : false
+      let token = localStorage.getItem('business-token') ? localStorage.getItem('business-token') : sessionStorage.getItem('business-token') ? sessionStorage.getItem('business-token') : false
       if (token) {
         location.href = '#/container/data'
       }
@@ -75,10 +75,10 @@
             let data = res.data
             this.$refs.toast.show('登陆成功')
             if (this.remenber) {
-              localStorage.setItem('token', data.access_token)
+              localStorage.setItem('business-token', data.access_token)
               localStorage.setItem('userName', data.admin_info.username)
             } else {
-              sessionStorage.setItem('token', data.access_token)
+              sessionStorage.setItem('business-token', data.access_token)
               sessionStorage.setItem('userName', data.admin_info.username)
             }
             setTimeout(() => {

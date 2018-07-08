@@ -43,8 +43,8 @@ function checkCode(res) {
   if (res.data && (res.data.code !== ERR_OK)) {
     switch (res.data.code) {
       case TIME_OUT:
-        localStorage.removeItem('token')
-        sessionStorage.removeItem('token')
+        localStorage.removeItem('business-token')
+        sessionStorage.removeItem('business-token')
         location.href = '#/login'
         break
     }
@@ -70,7 +70,7 @@ function requestException(res) {
 
 export default {
   setDefaults() {
-    let authorization = localStorage.getItem('token') || sessionStorage.getItem('token')
+    let authorization = localStorage.getItem('business-token') || sessionStorage.getItem('business-token')
     axios.defaults.headers.common['Authorization'] = authorization
     axios.defaults.baseURL = BASE_URL.api
   },

@@ -65,7 +65,7 @@
   import AdminSelect from 'components/admin-select/admin-select'
   const titleList = ['申请日期', '业务类型', '商户账号', '提现渠道', '提现账号', '姓名', '可提现金额', '冻结金额', '申请提现金额', '处理状态', '操作']
   const statusList = [{title: '支付成功', status: 1}, {title: '退款', status: 3}]
-  const TOKEN = localStorage.getItem('token') || sessionStorage.getItem('token')
+  const TOKEN = localStorage.getItem('business-token') || sessionStorage.getItem('business-token')
   const SELECT = [{
     title: '  处理状态',
     type: 'open',
