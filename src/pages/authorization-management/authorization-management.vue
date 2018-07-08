@@ -3,7 +3,7 @@
     <div class="top">小程序授权</div>
     <div class="big-box">
       <div v-for="(item, index) in applyList" :key="index" :class="{'item-active': item.is_authorize}" @click="_authorzation(item)" class="item-box hand">
-        <img src="./icon-success@2x.png" class="right">
+        <img src="./icon-success@2x.png" class="right" v-show="item.is_authorize">
         <img :src="item.is_authorize ? require('./icon-'+item.suite_alias+'@2x.png') : require('./icon-'+item.suite_alias+'_default@2x.png')" class="icon">
         <div class="title">{{item.suite_title}}</div>
         <!--<span>{{item.is_authorize}}</span>-->
@@ -51,8 +51,8 @@
             redirectUri = encodeURI(redirectUri)
             let url = ` https://open.work.weixin.qq.com/3rdapp/install?suite_id=${res.suite_id}&pre_auth_code=${res.pre_auth_code}&redirect_uri=${redirectUri}&state=${res.suite_id},${res.corp_id}`
             // https://work.weixin.qq.com/wework_admin/third/authSuite?suite_id=ww65ff1d66710fd8c5&thirdapp_id=&pre_auth_code=8pNRGE4PsWU-ISoQGMRIEr0SiWREdne4LAOgyWbZR0yOrIjPsX0qmasErKTzdt4I&redirect_uri=http%3A%2F%2Fcallbacktest.jkweixin.com%3A8080&state=&from=#/authorization-detail&state=ww65ff1d66710fd8c5,ww8254a365bf92e5aa
-            console.log(url)
             window.open(url)
+            return
           }
           this.$refs.toast.show(res.message)
         })

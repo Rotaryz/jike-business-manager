@@ -494,7 +494,6 @@
   @import '~common/stylus/mixin'
   .form-box
     height: 100%
-    max-height: 900px
     overflow-y: scroll
     display: flex
     flex-direction: column
