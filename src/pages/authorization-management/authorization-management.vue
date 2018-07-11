@@ -33,8 +33,13 @@
       _getSuiteList () {
         Authorization.getSuiteist().then((res) => {
           if (res.error === ERR_OK) {
-            console.log(res.data)
-            this.applyList = res.data
+            const applyList = res.data
+            // res.data.forEach((item, index) => {
+            //   if (index < 2) {
+            //     applyList.push(item)
+            //   }
+            // })
+            this.applyList = applyList
           }
         })
       },
