@@ -1,19 +1,18 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.components.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'common/stylus/index.styl'
-import fastclick from 'fastclick'
-import store from './store'
+import http from './common/js/http'
+// import 'element-ui/lib/theme-chalk/index.css'
+// import {DatePicker} from 'element-ui'
 
-fastclick.attach(document.body)
+import 'common/stylus/index.styl'
+
+// Vue.use(DatePicker)
+http.setDefaults()
 
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   router,
-  store,
-  components: { App },
-  template: '<App/>'
+  render: h => h(App)
 })
