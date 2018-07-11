@@ -136,7 +136,9 @@
           Goods.putGoods(data, this.id).then((res) => {
             if (res.error === ERR_OK) {
               this.$refs.formBox.showContent('编辑产品成功')
+              return
             }
+            this.$refs.formBox.showContent(res.message)
           })
           // 编辑
           return
@@ -144,7 +146,9 @@
         Goods.createGoods(data).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.formBox.showContent('新建产品成功')
+            return
           }
+          this.$refs.formBox.showContent(res.message)
         })
         // 新建
       },
