@@ -4,6 +4,7 @@ import goods from './goods'
 import upload from './upload'
 import website from './website'
 import employee from './employee'
+import reset from './reset'
 // 登陆模块
 export const Admin = admin
 
@@ -21,3 +22,6 @@ export const Website = website
 
 // 员工管理
 export const Employee = employee
+
+// 账户中心
+export const Reset = reset

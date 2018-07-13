@@ -23,7 +23,7 @@
       <!--<i class="check" :class="{'check-yes' : remenber}"></i>-->
       <!--<span class="tip">记住密码</span>-->
       <!--</div>-->
-      <div class="submit-no" :class="{'submit-disable': !isLogin}" @click="login">
+      <div class="submit-no hand" :class="{'submit-disable': !isLogin}" @click="login">
         登录
       </div>
     </div>
@@ -83,7 +83,7 @@
             let data = res.data
             this.$refs.toast.show('登陆成功')
             localStorage.setItem('business-token', data.access_token)
-            localStorage.setItem('userName', data.merchant_info.username)
+            localStorage.setItem('userName', data.merchant_info.name)
             setTimeout(() => {
               this.$router.push('container/officialNetwork')
             }, 500)

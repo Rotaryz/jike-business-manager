@@ -63,12 +63,12 @@
   const NAVLIST = [
     {
       title: '首页',
-      url: 'javaScript:;',
+      url: '/',
       icon: require('./icon-homepage@2x.png'),
       childrenIndex: -1,
       children: [{
         title: '首页',
-        url: 'javaScript:;'
+        url: '/'
       }],
       showHeight: HEIGHT
     }, {

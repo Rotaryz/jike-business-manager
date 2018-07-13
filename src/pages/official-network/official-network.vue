@@ -16,7 +16,7 @@
             <span class="official-tip">公司图片</span>
             <div class="image-file-box">
               <div class="add-pic" v-for="(item, index) in image" :key="index">
-                <img :src="item.image_url" class="add-pics hand" @click="_upImage(index)">
+                <img :src="item.url" class="add-pics hand" @click="_upImage(index)">
               </div>
               <div class="add-pic">
                 <img src="./pic-uploading@2x.png" class="add-pics hand" @click="_upImage(-1)">
@@ -70,11 +70,11 @@
             if (res.error === ERR_OK) {
               res = res.data
               if (this.imageIndex === -1) {
-                let item = {id: 0, image_id: res.id, image_url: res.url, sort: this.image.length}
+                let item = {id: 0, image_id: res.id, url: res.url, sort: this.image.length}
                 this.image.push(item)
                 return
               }
-              let item = {image_id: res.id, image_url: res.url, id: this.image[this.imageIndex].id}
+              let item = {image_id: res.id, url: res.url, id: this.image[this.imageIndex].id, sort: this.imageIndex}
               this.image.splice(this.imageIndex, 1, item)
             }
           })
@@ -86,8 +86,9 @@
           if (res.error === ERR_OK) {
             res = res.data
             console.log(res)
-            this.companyIntroduction = res.introduction
+            this.content = res.introduction
             this.image = res.merchant_image
+            console.log(this.image)
             this.id = res.id
           }
         })
@@ -110,7 +111,7 @@
           })
           return
         }
-        Website.upWebsite(this.id).then((res) => {
+        Website.upWebsite(this.id, data).then((res) => {
           if (res.error === ERR_OK) {
             let title = release ? '发布成功' : '保存成功'
             this.$refs.formBox.showContent(title)
