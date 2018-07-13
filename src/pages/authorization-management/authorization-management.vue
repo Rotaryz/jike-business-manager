@@ -99,6 +99,7 @@
   .big-box
     display: flex
     padding-left: 200px
+    flex-wrap :wrap
     .item-box
       position: relative
       margin-top: 51px
