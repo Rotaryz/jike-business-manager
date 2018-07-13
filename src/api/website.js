@@ -23,8 +23,8 @@ export default {
    * @param data
    * @returns {*}
    */
-  upWebsite (id) {
+  upWebsite (id, data) {
     let url = `/api/merchant/website/${id}`
-    return http.post(url)
+    return http.put(url, data)
   }
 }

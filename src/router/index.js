@@ -80,10 +80,11 @@ export default new Router({
         meta: {
           title: '员工管理,组织架构,员工编辑'
         }
-      }, {
-        path: 'authorizationDetail', // 授权回调
-        component: AuthorizationDetail
       }]
+    },
+    {
+      path: '/authorizationDetail', // 授权回调
+      component: AuthorizationDetail
     }
   ]
 })

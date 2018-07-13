@@ -10,11 +10,11 @@
           <div type="text" class="official-content"></div>
           <div class="official-title-box">
             <span class="official-tip">产品标题</span>
-            <input type="text" class="official-title" placeholder="请输入产品标题" v-model="productTitle">
+            <input type="text" class="official-title" placeholder="请输入产品标题" v-model="productTitle" maxlength="20">
           </div>
           <div class="official-text-box">
             <span class="official-tip">推荐理由</span>
-            <textarea name="official" id="official-msg" placeholder="请输入公司介绍" v-model="reason"></textarea>
+            <textarea name="official" id="official-msg" placeholder="请输入公司介绍" v-model="reason" maxlength="50"></textarea>
           </div>
           <div class="official-image">
             <span class="official-tip">产品封面</span>
@@ -85,7 +85,9 @@
             if (res.error === ERR_OK) {
               res = res.data
               this.productCover = {image_id: res.id, image_url: res.url}
+              return
             }
+            this.$refs.formBox.showContent(res.message)
           })
         }
       },
@@ -112,7 +114,9 @@
               }
               let item = {image_id: res.id, image_url: res.url, id: this.productDetail[this.imageIndex].id}
               this.productDetail.splice(this.imageIndex, 1, item)
+              return
             }
+            this.$refs.formBox.showContent(res.message)
           })
         }
       },
@@ -131,11 +135,12 @@
         })
       },
       _addProduct () {
-        let data = {title: this.productTitle, subtitle: this.reason, goods_images: this.productDetail, platform_price: 10, original_price: 10, image_id: this.productCover.image_id, total_stock: -1}
+        let data = {title: this.productTitle, subtitle: this.reason, goods_images: this.productDetail, platform_price: 10, original_price: 10, image_id: this.productCover.image_id, total_stock: -1, is_online: 1}
         if (this.id) {
           Goods.putGoods(data, this.id).then((res) => {
             if (res.error === ERR_OK) {
               this.$refs.formBox.showContent('编辑产品成功')
+              this.$router.back()
               return
             }
             this.$refs.formBox.showContent(res.message)
@@ -146,6 +151,7 @@
         Goods.createGoods(data).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.formBox.showContent('新建产品成功')
+            this.$router.back()
             return
           }
           this.$refs.formBox.showContent(res.message)

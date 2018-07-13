@@ -1,77 +1,77 @@
 <template>
-  <form-box :pageShow="pageShow">
+  <form-box :pageShow="pageShow" ref="formBox">
     <div slot="form-list" class="account-center">
       <div class="account-center-header">
         <span class="account-center-title">账户信息</span>
       </div>
       <div class="account-center-item">
         <span class="account-center-text">企业名称</span>
-        <span class="account-center-msg">广州波仕卡汽车科技有限公司</span>
-        <span class="change hand">修改</span>
+        <span class="account-center-msg">{{userInfo.name}}</span>
+        <span class="change hand" @click="_showShade('name')">修改</span>
       </div>
       <div class="account-center-item">
         <span class="account-center-text">名片数量</span>
-        <span class="account-center-msg">3/100</span>
+        <span class="account-center-msg">{{userInfo.init_stock}}/100</span>
       </div>
       <div class="account-center-item">
         <span class="account-center-text">到期时间</span>
-        <span class="account-center-msg">2019-09-08</span>
+        <span class="account-center-msg">{{userInfo.expire_time}}</span>
       </div>
       <div class="account-center-item">
         <span class="account-center-text">登录账号</span>
-        <span class="account-center-msg">13316241009</span>
-        <span class="change hand">修改</span>
+        <span class="account-center-msg">{{userInfo.mobile}}</span>
+        <!--<span class="change hand" @click="_showShade('mobile')">修改</span>-->
       </div>
       <div class="account-center-item">
         <span class="account-center-text">登录密码</span>
         <span class="account-center-msg">************</span>
-        <span class="change hand">修改</span>
+        <span class="change hand" @click="_showShade('pass')">修改</span>
       </div>
     </div>
     <div slot="shade-box" class="shade-box">
-      <!--<div class="change-box">-->
-      <!--<p class="shade-title">修改企业名称<span class="close">&times;</span></p>-->
-      <!--<div class="chang-msg">-->
-      <!--<span>企业名称</span>-->
-      <!--<input type="text" class="change-name">-->
-      <!--</div>-->
-      <!--<div class="shade-btn">-->
-      <!--<div class="share-btn-item hare-btn-white">取消</div>-->
-      <!--<div class="share-btn-item hare-btn-orgin">修改</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--<div class="identity-box">-->
-      <!--<p class="shade-title">身份验证<span class="close">&times;</span></p>-->
-      <!--<p class="identity-tip">手机号修改需要进行身份验证，请根据指示完成验证</p>-->
-      <!--<div class="chang-msg">-->
-      <!--<span>短信验证码</span>-->
-      <!--<input type="text" class="change-name" placeholder="请输入验证码">-->
-      <!--<span class="identity-items identity-get-code">获取</span>-->
-      <!--</div>-->
-      <!--<div class="shade-btn">-->
-      <!--<div class="share-btn-item hare-btn-white">取消</div>-->
-      <!--<div class="share-btn-item hare-btn-orgin">修改</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <div class="change-password">
-        <p class="shade-title">修改企业名称<span class="close">&times;</span></p>
+      <div class="change-box" v-if="showType === 'name'">
+        <p class="shade-title">修改企业名称<span class="close" @click="_hideShade">&times;</span></p>
+        <div class="chang-msg">
+          <span>企业名称</span>
+          <input type="text" class="change-name" v-model="bussName">
+        </div>
+        <div class="shade-btn">
+          <div class="share-btn-item hare-btn-white hand" @click="_hideShade">取消</div>
+          <div class="share-btn-item hare-btn-orgin hand" @click="_resetName">修改</div>
+        </div>
+      </div>
+      <div class="identity-box" v-if="showType === 'mobile'">
+        <p class="shade-title">身份验证<span class="close" @click="_hideShade">&times;</span></p>
+        <p class="identity-tip">手机号修改需要进行身份验证，请根据指示完成验证</p>
+        <div class="chang-msg">
+          <span>短信验证码</span>
+          <input type="text" class="change-name" placeholder="请输入验证码">
+          <span class="identity-items identity-get-code">获取</span>
+        </div>
+        <div class="shade-btn">
+          <div class="share-btn-item hare-btn-white hand" @click="_hideShade">取消</div>
+          <div class="share-btn-item hare-btn-orgin hand">修改</div>
+        </div>
+      </div>
+      <div class="change-password" v-if="showType === 'pass'">
+        <p class="shade-title">修改企业名称<span class="close" @click="_hideShade">&times;</span></p>
         <div class="password-box">
           <div class="chang-msg">
             <span class="chang-text">旧密码</span>
-            <input type="text" placeholder="请输入旧密码" class="change-name">
+            <input type="password" placeholder="请输入旧密码" class="change-name" v-model="oldPassword">
           </div>
           <div class="chang-msg">
             <span class="chang-text">新密码</span>
-            <input type="text" placeholder="新密码" class="change-name">
+            <input type="password" placeholder="新密码" class="change-name" v-model="password">
           </div>
           <div class="chang-msg">
             <span class="chang-text">确认密码</span>
-            <input type="text" placeholder="确认秘密" class="change-name">
+            <input type="password" placeholder="确认秘密" class="change-name" v-model="anPassword">
           </div>
         </div>
         <div class="shade-btn">
-          <div class="share-btn-item hare-btn-white">取消</div>
-          <div class="share-btn-item hare-btn-orgin">修改</div>
+          <div class="share-btn-item hare-btn-white hand" @click="_hideShade">取消</div>
+          <div class="share-btn-item hare-btn-orgin hand" @click="_resetPass">修改</div>
         </div>
       </div>
     </div>
@@ -80,13 +80,60 @@
 
 <script>
   import FormBox from 'components/form-box/form-box'
-  // import { ERR_OK } from 'api/config'
+  import { Reset } from 'api'
+  import { ERR_OK } from '../../api/config'
 
   export default {
     name: 'account-center',
-    data() {
+    data () {
       return {
-        pageShow: false
+        pageShow: false,
+        bussName: '',
+        showType: 'name',
+        userInfo: {},
+        password: '',
+        oldPassword: '',
+        anPassword: ''
+      }
+    },
+    created () {
+      Reset.merchantData().then((res) => {
+        if (res.error === ERR_OK) {
+          this.userInfo = res.data
+          this.name = res.data.name
+          console.log(this.userInfo)
+        }
+      })
+    },
+    methods: {
+      _showShade (name) {
+        this.showType = name
+        this.$refs.formBox.showShade()
+      },
+      _hideShade () {
+        this.$refs.formBox.hideShade()
+      },
+      _resetName () {
+        Reset.resetName({name: this.bussName}).then((res) => {
+          this._hideShade()
+          this.userInfo.name = this.bussName
+          localStorage.setItem('userName', this.bussName)
+          console.log(res)
+        })
+      },
+      _resetPass () {
+        if (this.password !== this.anPassword && this.password) {
+          this.$refs.formBox.showContent('两次输入密码不一致')
+          return
+        }
+        Reset.resetPassword({password: this.password, old_password: this.oldPassword}).then((res) => {
+          if (res.error === ERR_OK) {
+            this._hideShade()
+            this.$refs.formBox.showContent('成功修改密码')
+            return
+          }
+          this.$refs.formBox.showContent(res.message)
+        })
       }
     },
     components: {
@@ -129,7 +176,7 @@
     color: #979797
     font-size: 24px
     &:hover
-      transform: translateY(10%) rotate(90deg)
+      transform: translateY(-70%) translateX(39%) rotate(90deg)
       transform-origin: 50%
       transition: transform 0.5s
 
@@ -150,6 +197,10 @@
           height: 28px
           margin-left: 11px
           border: 1px solid $color-lineCC
+          &::-webkit-input-placeholder
+            color: $color-lineCC
+            font-size: $font-size-medium14
+            font-family: $fontFamilyLight
 
     .identity-box
       height: 331px
@@ -190,14 +241,18 @@
           align-items: center
           .chang-text
             width: 56px
-            font-size : $font-size-medium14
-            text-align :right
+            font-size: $font-size-medium14
+            text-align: right
           .change-name
             margin-left: 11px
             height: 28px
             text-indent: 8px
             width: 292px
             border: 0.5px solid $color-lineCC
+            &::-webkit-input-placeholder
+              color: $color-lineCC
+              font-size: $font-size-medium14
+              font-family: $fontFamilyLight
     .shade-title
       text-indent: 30px
       position: relative

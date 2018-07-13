@@ -23,10 +23,6 @@
       <div class="tag-title">
         <span class="title-item" v-for="(item,index) in navTitle" :key="index">{{index > 0 ? '/' : ''}} {{item}}</span>
       </div>
-      <div class="tag-choice" v-if="chioce">
-        <slot name="order-sec"></slot>
-        <slot name="tag-sel"></slot>
-      </div>
       <slot name="tap"></slot>
     </div>
     <slot name="money"></slot>
@@ -87,46 +83,12 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import globals from 'api/globals'
-  import { ERR_OK } from 'api/config'
   import Toast from 'components/toast/toast'
 
-  const allWay = '全部'
-  const shopWay = {id: 0, name: '全部', parent_id: -1}
   export default {
     name: 'demonstration',
     props: {
-      tagTop: {
-        type: Boolean,
-        default: false
-      },
       pageShow: {
-        type: Boolean,
-        default: true
-      },
-      timeList: {
-        type: Array,
-        default: () => [{title: '今天', type: '1'}, {
-          title: '昨天',
-          type: '-1'
-        }, {title: '7天', type: '7'}, {title: '30天', type: '30'}, {
-          title: '自定义',
-          type: ''
-        }]
-      },
-      chioce: {
-        type: Boolean,
-        default: true
-      },
-      isCity: {
-        type: Boolean,
-        default: true
-      },
-      isDate: {
-        type: Boolean,
-        default: true
-      },
-      isIndustrie: {
         type: Boolean,
         default: true
       },
@@ -137,59 +99,18 @@
     },
     data () {
       return {
-        focus: false,
-        showBlank: false,
-        moreTime: '',
-        pageInput: '',
-        timeIndex: 0,
         isShade: false,
+        showBlank: false,
+        focus: false,
         page: 1,
         pageDetail: false,
-        showPicker: false,
         pageIndex: 0,
         prams: ['', '', '', ''],
-        cityIndex: 0,
-        industrieList: [{
-          title: '行业',
-          data: [],
-          show: false,
-          index: -1
-        }, {
-          title: '子行业',
-          data: [],
-          show: false,
-          index: -1
-        }],
-        industrieId: -1,
-        cityList: [{
-          title: '省',
-          type: 'province',
-          data: [],
-          show: false,
-          index: -1
-        }, {
-          title: '市',
-          type: 'city',
-          data: [],
-          show: false,
-          index: -1
-        }, {
-          title: '区',
-          type: 'district',
-          data: [],
-          show: false,
-          index: -1
-        }, {
-          title: '商圈',
-          type: 'business_circle',
-          data: [],
-          show: false,
-          index: -1
-        }],
         shopIndex: 0,
         shopData: ['', ''],
         navTitle: [],
         setTime: null,
+        tagTop: false,
         isHand: {handLeft: 'pointer', handRight: 'pointer', handGo: 'pointer'},
         navStatus: true,
         userName: localStorage.getItem('userName') || sessionStorage.getItem('userName'),
@@ -197,6 +118,7 @@
         showOut: false,
         dataStatus: '',
         width: 200,
+        pageInput: '',
         offsetWhidt: document.body.clientWidth - 200
       }
     },
@@ -251,88 +173,6 @@
           this.navTitle = sessionStorage.getItem('title') ? sessionStorage.getItem('title').split(',') : this.navTitle
         }, 30)
       },
-      hideHeightLine () {
-        this.timeIndex = -1
-        return this.timeIndex
-      },
-      isBlank (res) {
-        if (res.length === 0) {
-          this.showBlank = true
-        } else {
-          this.showBlank = false
-        }
-      },
-      leaveHide () {
-        this.setTime = setTimeout(() => {
-          this.clickHide()
-        }, 1500)
-      },
-      clickHide () {
-        this.cityList.forEach((item) => {
-          item.show = false
-        })
-        this.industrieList.forEach((item) => {
-          item.show = false
-        })
-      },
-      endShow () {
-        clearTimeout(this.setTime)
-      },
-      industrieDetail (idx, index, title, id) {
-        this.cityList[index].index = idx
-        setTimeout(() => {
-          this.industrieList[index].show = false
-          this.industrieList[index].title = title
-          this.shopData[index] = id
-          this.industrieId = id
-          this.beginPage()
-          this.shopData.forEach((item, idx) => {
-            if (idx > index) {
-              if (idx === 1) {
-                this.industrieList[idx].title = '子行业'
-              }
-            }
-          })
-          let shop = {parent_id: this.shopData[0], child_id: this.shopData[1]}
-          this.$emit('showIndustrie', shop)
-        }, 100)
-      },
-      showIndustrie () {
-        let data = {}
-        if (this.industrieId !== -1) {
-          data = {partent_id: this.shopData[0]}
-        }
-        globals.industrie(data).then((res) => {
-          if (res.error === ERR_OK) {
-            this.industrieList[this.shopIndex].data = res.data
-            this.industrieList[this.shopIndex].data.unshift(shopWay)
-          }
-        })
-      },
-      industrie (index) {
-        this.cityList.forEach((item) => {
-          item.show = false
-        })
-        this.industrieList.forEach((item, idx) => {
-          if (idx !== index) {
-            item.show = false
-          }
-        })
-        if (index === 0) {
-          this.industrieId = -1
-          this.shopData[1] = ''
-        } else if (index === 1 && this.industrieId === -1) {
-          return false
-        }
-        if (index > 0 && this.shopData[0] === '') {
-          return false
-        }
-        this.hideShade()
-        this.shopIndex = index
-        this.industrieList[index].show = !this.industrieList[index].show
-        this.industrieList[index].active = true
-        this.showIndustrie()
-      },
       goPage () {
         if (this.pageInput !== '') {
           this.pageInput = Math.floor(this.pageInput * 1)
@@ -349,7 +189,6 @@
         this.pageDetail = !this.pageDetail
       },
       hidePageDetail () {
-        this.clickHide()
         this.pageDetail = false
         this.focus = false
       },
@@ -360,82 +199,6 @@
           this.hidePageDetail()
         }, 100)
         this.$emit('addPage', this.page)
-      },
-      showCity () {
-        this.hideShade()
-        let data = this.infoData(this.prams)
-        globals.businessCircle(data).then((res) => {
-          if (res.error === ERR_OK) {
-            if (res.data.filter[this.cityList[this.cityIndex].type]) {
-              this.cityList[this.cityIndex].data = res.data.filter[this.cityList[this.cityIndex].type]
-              this.cityList[this.cityIndex].data.unshift(allWay)
-            }
-          }
-        })
-      },
-      checkCity (index) {
-        this.industrieList.forEach((item) => {
-          item.show = false
-        })
-        this.regPrams()
-        this.cityList.forEach((item, idx) => {
-          if (idx !== index) {
-            item.show = false
-          }
-        })
-        if (index > 0 && (this.prams[index - 1] === '' || this.prams[index - 1].length === 1)) {
-          return false
-        }
-        this.cityIndex = index
-        this.cityList[index].show = !this.cityList[index].show
-        this.cityList[index].active = true
-        this.showCity()
-      },
-      showCityList (idx, index, title) {
-        this.cityList[index].index = idx
-        setTimeout(() => {
-          this.cityList[index].show = false
-          this.cityList[index].title = title
-          this.prams.forEach((item, idx) => {
-            if (idx > index) {
-              if (idx === 1) {
-                this.cityList[idx].title = '市'
-              } else if (idx === 2) {
-                this.cityList[idx].title = '区'
-              } else if (idx === 3) {
-                this.cityList[idx].title = '商圈'
-              }
-            }
-          })
-          this.regPrams()
-          this.beginPage()
-          this.$emit('showCity', this.prams, this.page)
-        }, 100)
-      },
-      regPrams () {
-        for (let i = 0; i < this.prams.length; i++) {
-          this.prams[i] = this.cityList[i].title.replace(/^(市)|^(区)|^(商圈)/g, '')
-        }
-      },
-      infoData (res) {
-        let data = {
-          province: res[0],
-          city: res[1],
-          district: res[2],
-          business_circle: res[3]
-        }
-        return data
-      },
-      checkTime (index, type) {
-        this.hideShade()
-        this.timeIndex = index
-        if (type === '') {
-          this.moreTime = ''
-          this.showPicker = true
-          return false
-        }
-        this.showPicker = false
-        this.$emit('checkTime', type, this.page)
       },
       showShade () {
         this.isShade = true
@@ -469,17 +232,6 @@
       beginPage () {
         this.pageInput = ''
         this.page = 1
-      }
-    },
-    watch: {
-      moreTime (newVal) {
-        let time = []
-        if (Array.isArray(newVal)) {
-          newVal.forEach((item) => {
-            time.push(item.toLocaleDateString().replace(/\//g, '-'))
-          })
-          this.$emit('checkTime', time, 1)
-        }
       }
     },
     components: {
@@ -821,7 +573,7 @@
       box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.60)
       border-radius: 3px
       background: $color-white
-      box-sizing :border-box
+      box-sizing: border-box
       width: 534px
 
   .herder-peo

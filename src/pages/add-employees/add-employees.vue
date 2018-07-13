@@ -74,6 +74,7 @@
           Employee.updateUser(data).then((res) => {
             if (res.error === ERR_OK) {
               this.$refs.formBox.showContent('保存成功')
+              this.$router.back()
               return
             }
             this.$refs.formBox.showContent(res.message)
@@ -83,6 +84,7 @@
         Employee.createcUser(data).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.formBox.showContent('保存成功')
+            this.$router.back()
             return
           }
           this.$refs.formBox.showContent(res.message)

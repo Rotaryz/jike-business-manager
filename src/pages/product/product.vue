@@ -16,11 +16,11 @@
         <div class="check-box">
           <span class="check-item hand" :class="{'check-ok': checkAll}" @click="_getAll(checkAll)"></span>
         </div>
-        <div class="list-item" :class="{hand: item === '状态'}" v-for="(item, index) in titleList" :key="index" @click="_showStatusBox(item)">
-          {{item}}
+        <div class="list-item" :class="{hand: index === 4}" v-for="(item, index) in titleList" :key="index" @click="_showStatusBox(item)">
+          {{index === 4 ? status ? '已上架' : '已下架' :item}}
           <img src="./icon-down@2x.png" class="down-icon" :class="{'down-icon-active': showStatus}" v-if="item === '状态'">
           <transition name="fade">
-            <ul class="status-box" v-if="item === '状态'" v-show="showStatus" @click.stop="">
+            <ul class="status-box" v-if="index === 4" v-show="showStatus" @click.stop="">
               <li class="status-item" @click.stop="_checkStatue(1)">已上架产品</li>
               <li class="status-item" @click.stop="_checkStatue(0)">已下架产品</li>
             </ul>
