@@ -21,6 +21,9 @@
             <div class="image-file-box">
               <div class="add-pic">
                 <img :src="productCover.image_url || addIcon" class="add-pics hand" @click="_fileChange(0)">
+                <div class="close-icon hand" @click.stop="_delCover" v-if="productCover.image_url">
+                  <img class="close-icon" src="./icon-del@2x.png">
+                </div>
               </div>
               <form>
                 <input type="file" id="product-cover" class="file" @change="_fileChange($event)" accept="image/*">
@@ -33,6 +36,9 @@
             <div class="image-file-box">
               <div class="add-pic" v-for="(item, index) in productDetail" :key="index">
                 <img :src="item.image_url" class="add-pics hand" @click="_fileDetail(index)">
+                <div class="close-icon hand" @click.stop="_delImage(index)">
+                  <img class="close-icon" src="./icon-del@2x.png">
+                </div>
               </div>
               <div class="add-pic">
                 <img src="./pic-uploading@2x.png" class="add-pics hand" @click="_fileDetail(-1)">
@@ -77,6 +83,12 @@
       this._getProduvtDetail()
     },
     methods: {
+      _delCover () {
+        this.productCover = {}
+      },
+      _delImage (index) {
+        this.productDetail.splice(index, 1)
+      },
       _fileChange (e) {
         document.getElementById('product-cover').click()
         if (e.target) {
@@ -130,17 +142,36 @@
             this.productTitle = res.title
             this.productDetail = res.goods_images
             this.productCover.image_url = res.image_url
+            this.productCover.image_id = res.image_id
             this.reason = res.subtitle
           }
         })
       },
       _addProduct () {
-        let data = {title: this.productTitle, subtitle: this.reason, goods_images: this.productDetail, platform_price: 10, original_price: 10, image_id: this.productCover.image_id, total_stock: -1, is_online: 1}
+        if (!this.productCover.image_id) {
+          this.$refs.formBox.showContent('请上传封面图')
+          return
+        }
+        if (!this.productDetail.length) {
+          this.$refs.formBox.showContent('请上传产品详情图片')
+          return
+        }
+        if (!this.reason) {
+          this.$refs.formBox.showContent('请输入公司介绍')
+          return
+        }
+        if (!this.productTitle) {
+          this.$refs.formBox.showContent('请输入产品标题')
+          return
+        }
+        let data = {title: this.productTitle, subtitle: this.reason, goods_images: this.productDetail, platform_price: 10, original_price: 10, image_id: this.productCover.image_id || -1, total_stock: -1, is_online: 1}
         if (this.id) {
           Goods.putGoods(data, this.id).then((res) => {
             if (res.error === ERR_OK) {
               this.$refs.formBox.showContent('编辑产品成功')
-              this.$router.back()
+              setTimeout(() => {
+                this.$router.back()
+              }, 200)
               return
             }
             this.$refs.formBox.showContent(res.message)
@@ -151,7 +182,9 @@
         Goods.createGoods(data).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.formBox.showContent('新建产品成功')
-            this.$router.back()
+            setTimeout(() => {
+              this.$router.back()
+            }, 200)
             return
           }
           this.$refs.formBox.showContent(res.message)
@@ -226,14 +259,32 @@
         align-items: flex-end
         position: relative
         .add-pic
+          position: relative
           margin-bottom: 10px
           margin-left: 16px
           width: 120px
           height: 96px
           overflow: hidden
+          margin-bottom: 10px
         .add-pics
           width: 100%
+        .close-icon
+          height: 16.5px
+          width: 16.5px
+          line-height: 16.5px
+          text-align: center
+          background: rgba(0, 0, 0, 0.20)
+          color: $color-white
+          font-size: $font-size-10
+          position: absolute
+          right: 0px
+          top: 0px
+          .close-icon
+            cll-center()
+            height: 16.5px
+            width: 16.5px
         .image-tip
+          margin-bottom: 10px
           color: $color-lineCC
           white-space: normal
           margin-left: 10px

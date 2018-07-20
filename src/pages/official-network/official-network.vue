@@ -17,6 +17,9 @@
             <div class="image-file-box">
               <div class="add-pic" v-for="(item, index) in image" :key="index">
                 <img :src="item.url" class="add-pics hand" @click="_upImage(index)">
+                <div class="close-icon hand" @click.stop="_delCover(index)">
+                  <img class="close-icon" src="./icon-del@2x.png">
+                </div>
               </div>
               <div class="add-pic">
                 <img src="./pic-uploading@2x.png" class="add-pics hand" @click="_upImage(-1)">
@@ -58,6 +61,9 @@
       this._getNetWork()
     },
     methods: {
+      _delCover (index) {
+        this.image.splice(index, 1)
+      },
       _upImage (e) {
         let type = typeof e
         if (type === 'number') {
@@ -99,12 +105,19 @@
         return param
       },
       _setNetWork (release) {
+        if (!this.content) {
+          this.$refs.formBox.showContent('请输入公司介绍')
+        }
+        if (!this.image.length) {
+          this.$refs.formBox.showContent('请上传公司图片')
+        }
         let data = {introduction: this.content, image: this.image, is_release: release}
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
               let title = release ? '发布成功' : '保存成功'
               this.$refs.formBox.showContent(title)
+              this._getNetWork()
               return
             }
             this.$refs.formBox.showContent(res.message)
@@ -188,13 +201,32 @@
         position: relative
         margin-bottom: 10px
         .add-pic
+          margin-bottom: 10px
           margin-left: 16px
           width: 120px
           height: 96px
+          position: relative
           overflow: hidden
         .add-pics
           width: 100%
+        .close-icon
+          height: 16.5px
+          width: 16.5px
+          line-height: 16.5px
+          text-align: center
+          background: rgba(0, 0, 0, 0.20)
+          color: $color-white
+          font-size: $font-size-10
+          position: absolute
+          right: 0px
+          top: 0px
+          .close-icon
+            cll-center()
+            height: 16.5px
+            width: 16.5px
         .image-tip
+          margin-bottom: 10px
+          margin-top: 10px
           color: $color-lineCC
           white-space: normal
           margin-left: 10px
