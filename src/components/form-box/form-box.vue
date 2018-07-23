@@ -250,8 +250,11 @@
     display: flex
     flex-direction: column
     .tag
+      display :flex
       background: $color-white
       height: 90px
+      align-items :center
+      position: relative
       .tag-title
         line-height: 90px
         color: $color-text-little

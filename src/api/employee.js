@@ -72,5 +72,14 @@ export default {
   bossRadarChange (data) {
     let url = 'api/merchant/boss-radar-change'
     return http.get(url, data)
+  },
+  /**
+   * 获取员工二维码
+   * @param data
+   * @returns {*}
+   */
+  getEmployeeQrcode (data) {
+    let url = 'api/merchant/get-employee-qrcode'
+    return http.get(url, data)
   }
 }

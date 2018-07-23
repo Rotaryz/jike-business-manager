@@ -1,5 +1,15 @@
 <template>
   <form-box :pageDtail="pageDtail" ref="formBox" @addPage="_addPage">
+    <div slot="tap" class="bus-qr-code">
+      <div class="bus-qr-code-item">
+        <img src="./icon-account@2x.png" class="bus-qr-code-icon">
+        <span class="bus-qr-code-text">已开通 ({{detail.use_radar_count}}/{{detail.init_stock}})</span>
+      </div>
+      <div class="bus-qr-code-item hand" @click="_showShade()">
+        <img src="./icon-codeqy@2x.png" class="bus-qr-code-icon">
+        <span class="bus-qr-code-text">企业号二维码</span>
+      </div>
+    </div>
     <div slot="form-list" class="form-list">
       <div class="tool">
         <div class="tool-search">
@@ -39,9 +49,13 @@
               </div>
             </div>
           </div>
-          <div class="list-item underline hand">员工二维码</div>
+          <div class="list-item underline hand" @click="_getQrCode(item.id)">员工二维码</div>
         </li>
       </ul>
+    </div>
+    <div slot="shade-box" class="shade-box">
+      <p class="shade-title">{{shadeTitle}}<span class="close" @click="_hideShade">&times;</span></p>
+      <img :src="imageUrl" class="shade-img">
     </div>
   </form-box>
 </template>
@@ -62,7 +76,10 @@
         page: 1,
         name: '',
         userList: [],
-        pageDtail: [{total: 1, per_page: 10, total_page: 1}]
+        pageDtail: [{total: 1, per_page: 10, total_page: 1}],
+        detail: {},
+        imageUrl: '',
+        shadeTitle: '企业二维码'
       }
     },
     created () {
@@ -73,6 +90,26 @@
         this.page = 1
         this.$refs.formBox.beginPage()
         this._getList()
+      },
+      _hideShade () {
+        this.$refs.formBox.hideShade()
+      },
+      _showShade () {
+        this.shadeTitle = '企业二维码'
+        this.imageUrl = this.detail.corp_wxqrcode
+        this.$refs.formBox.showShade()
+      },
+      _getQrCode (id) {
+        this.shadeTitle = '员工二维码'
+        let data = {user_id: id}
+        Employee.getEmployeeQrcode(data).then((res) => {
+          if (res.error === ERR_OK) {
+            this.imageUrl = res.data.qrcode
+            this.$refs.formBox.showShade()
+            return
+          }
+          this.$refs.formBox.showContent(res.message)
+        })
       },
       _aiRadarChange (item) {
         let status = item.ai_radar_status ? 0 : 1
@@ -102,15 +139,19 @@
         let data = {name: this.name, page: this.page, limit: 10}
         Employee.userList(data).then((res) => {
           if (res.error === ERR_OK) {
+            this.detail = {
+              init_stock: res.init_stock,
+              use_radar_count: res.use_radar_count,
+              corp_wxqrcode: res.corp_wxqrcode
+            }
+            console.log(this.detail)
             let pages = res.meta
             this.pageDtail = [{
               total: pages.total,
               per_page: pages.per_page,
               total_page: pages.last_page
             }]
-            console.log(this.pageDtail)
             this.userList = res.data
-            console.log(this.userList)
           }
         })
       },
@@ -294,4 +335,50 @@
         right: 7px
       .status-left
         left: 7px
+
+  .bus-qr-code
+    position: absolute
+    right: 75px
+    display: flex
+    col-center()
+    .bus-qr-code-item
+      display: flex
+      font-family: PingFangSC-Light
+      font-size: 18px
+      color: #333333
+      margin-left: 47px
+      align-items: center
+    .bus-qr-code-icon
+      width: 16px
+      height: 16px
+      margin-right: 12px
+
+  .shade-box
+    height: 357px
+    box-sizing: border-box
+
+  .shade-title
+    text-indent: 30px
+    position: relative
+    height: 60px
+    border-bottom: 1px solid #DADADA
+    line-height: 60px
+    .close
+      cursor: pointer
+      position: absolute
+      col-center()
+      right: 30px
+      color: #979797
+      font-size: 24px
+      &:hover
+        transform: translateY(-70%) translateX(39%) rotate(90deg)
+        transform-origin: 50%
+        transition: transform 0.5s
+
+  .shade-img
+    display: block
+    margin: 27px auto
+    height: 240px
+    width: 240px
+
 </style>
