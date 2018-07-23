@@ -3,6 +3,21 @@
     <div slot="form-list" class="official-network">
       <div class="iphone-box">
         <img src="./pic-nullpage@2x.png" class="iphone">
+        <div class="off-box" v-if="showDetail">
+          <div class="cover-box">
+            <img :src="productCover.image_url" class="cover" mode="widthFix">
+          </div>
+          <div class="goods-title">
+            <div class="goods-content">{{productTitle}}</div>
+            <div class="content-reason">{{reason}}</div>
+          </div>
+          <div class="goods-icon">
+            <span class="goods-small-box goods-small-tall"></span>
+            <span class="goods-small-box goods-small-width"></span>
+            <span class="goods-small-text">产品详情</span>
+          </div>
+          <img :src="item.image_url" class="goods-img" v-for="(item, index) in productDetail" :key="index" mode="widthFix">
+        </div>
       </div>
       <div class="official-right">
         <div class="offical-small">
@@ -76,6 +91,11 @@
         productDetail: [],
         addIcon: require('./pic-uploading@2x.png'),
         imageIndex: null
+      }
+    },
+    computed: {
+      showDetail () {
+        return this.productTitle || this.reason || this.productCover.image_url || this.productDetail.length
       }
     },
     created () {
@@ -209,7 +229,71 @@
     .iphone-box
       width: 18.32%
       float: left
+      min-width: 320px
       margin-left: 110px
+      position: relative
+    .off-box
+      top: 18.6%
+      left: 6.9%
+      width: 86.7%
+      height: 65.6%
+      overflow-x: hidden
+      word-wrap: break-all
+      white-space: normal
+      position: absolute
+      background: $color-white
+      border-bottom-right-radius: 5px
+      border-bottom-left-radius: 5px
+      box-sizing: border-box
+      .cover-box
+        overflow: hidden
+        height: 230px
+        .cover
+          width: 100%
+      .goods-icon
+        font-size: $font-size-medium14
+        color: $color-text
+        font-family: $font-family-regular
+        position: relative
+        height: 63px
+        .goods-small-box
+          border-1px(#CCCCCC, 0px)
+          all-center()
+        .goods-small-tall
+          height: 33px
+          width: 95px
+        .goods-small-width
+          height: 27px
+          width: 101px
+        .goods-small-text
+          all-center()
+      .goods-img
+        width: 100%
+        display: block
+      .goods-title
+        width: 92%
+        border-radius: 2px
+        border-1px()
+        background: $color-white
+        min-height: 110px
+        margin: -30px auto 0
+        padding: 20px 15px 0 25px
+        box-sizing: border-box
+        padding-bottom: 10px
+        .goods-content
+          line-height: 24px
+          color: $color-text
+          font-family: PingFangSC-Semibold
+          font-size: 19px
+        .content-reason
+          width: 100%
+          word-wrap: break-word
+          white-space: normal
+          font-size: $font-size-medium14
+          color: $color-text
+          margin-top: 10px
+          line-height: 22px
+
     .iphone
       width: 100%
     .official-right

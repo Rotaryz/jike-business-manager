@@ -12,12 +12,12 @@
       </div>
       <div class="employees-item">
         <span class="employees-name">绑定微信手机号</span>
-        <input type="text" placeholder="请输入" class="employees-input" v-model="mobile">
+        <input type="text" placeholder="请输入" class="employees-input" v-model="mobile" :disabled="disable">
         <span class="employees-tip">此号将绑定企业微信，用于微信内登录和接</span>
       </div>
       <div class="employees-item">
         <span class="employees-name">名片展示手机号</span>
-        <input type="text" placeholder="请输入" class="employees-input" v-model="businessCardMobile">
+        <input type="text" placeholder="请输入" class="employees-input" v-model="businessCardMobile" :disabled="disable">
         <span class="employees-tip">此号将显示在AI名片的联系方式上，可在AI雷达“我”-“个人信息”中修改</span>
       </div>
       <div class="official-btn">
@@ -42,7 +42,8 @@
         mobile: '',
         position: '',
         businessCardMobile: '',
-        id: null
+        id: null,
+        disable: false
       }
     },
     created () {
@@ -59,6 +60,7 @@
         }
         Employee.getUser({user_id: this.id}).then((res) => {
           if (res.error === ERR_OK) {
+            this.disable = true
             res = res.data
             this.name = res.name
             this.mobile = res.mobile

@@ -3,6 +3,19 @@
     <div slot="form-list" class="official-network">
       <div class="iphone-box">
         <img src="./pic-nullpage@2x.png" class="iphone">
+        <div class="off-box" v-if="image.length || content">
+          <div class="goods-icon">
+            <span class="goods-small-box goods-small-tall"></span>
+            <span class="goods-small-box goods-small-width"></span>
+            <span class="goods-small-text">公司介绍</span>
+          </div>
+          <div class="text" v-if="content">
+            {{content}}
+          </div>
+          <div class="img-box" v-if="image.length">
+            <img v-for="(item, index) in image" :key="index" :src="item.url" class="net-img" mode="widthFix">
+          </div>
+        </div>
       </div>
       <div class="official-right">
         <div class="official-content-box">
@@ -148,7 +161,58 @@
     .iphone-box
       width: 18.32%
       float: left
+      min-width: 320px
       margin-left: 110px
+      position: relative
+    .off-box
+      top: 18.6%
+      left: 6.9%
+      width: 86.55%
+      height: 65.6%
+      overflow-x: hidden
+      position: absolute
+      background:$color-white
+      border-radius :5px
+      padding : 15px
+      box-sizing :border-box
+      .goods-icon
+        font-size: $font-size-14
+        color: $color-text
+        font-family: $font-family-regular
+        position: relative
+        height: 63px
+        .goods-small-box
+          border-1px(#CCCCCC, 0px)
+          all-center()
+        .goods-small-tall
+          height: 33px
+          width: 95px
+        .goods-small-width
+          height: 27px
+          width: 101px
+        .goods-small-text
+          all-center()
+
+      .text
+        border-all: (rgba(32, 32, 46, 0.10))
+        box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
+        border-radius: 2px
+        background: $color-white
+        font-size: $font-size-14
+        font-family: $font-family-regular
+        line-height: 22px
+        padding: 15px
+        box-sizing: border-box
+    .img-box
+      margin-top: 15px
+      border-radius: 2px
+      border-1px()
+      box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
+      background: $color-white
+      padding: 15px
+      .net-img
+        display :block
+        width: 100%
     .iphone
       width: 100%
     .official-right
