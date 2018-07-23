@@ -102,10 +102,10 @@
       _getQrCode (id) {
         this.shadeTitle = '员工二维码'
         let data = {user_id: id}
+        this.$refs.formBox.showShade()
         Employee.getEmployeeQrcode(data).then((res) => {
           if (res.error === ERR_OK) {
             this.imageUrl = res.data.qrcode
-            this.$refs.formBox.showShade()
             return
           }
           this.$refs.formBox.showContent(res.message)
