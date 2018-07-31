@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <div class="list-item underline hand" @click="_getQrCode(item.id)">员工二维码</div>
+          <div class="list-item underline hand" @click="_getQrCode(item.id, item.name)">员工二维码</div>
         </li>
       </ul>
     </div>
@@ -99,10 +99,11 @@
         this.imageUrl = this.detail.corp_wxqrcode
         this.$refs.formBox.showShade()
       },
-      _getQrCode (id) {
-        this.shadeTitle = '员工二维码'
+      _getQrCode (id, name) {
+        this.shadeTitle = name + '的二维码'
         let data = {user_id: id}
         this.$refs.formBox.showShade()
+        this.imageUrl = ''
         Employee.getEmployeeQrcode(data).then((res) => {
           if (res.error === ERR_OK) {
             this.imageUrl = res.data.qrcode
