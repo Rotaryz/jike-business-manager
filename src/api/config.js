@@ -5,8 +5,8 @@ const LOCAL_URL = {
 }
 
 const DEV_URL = {
-  api: 'https://business-api.jkweixin.com'
-  // api: 'http://business-api.jerryf.cn'
+  // api: 'https://business-api.jkweixin.com'
+  api: 'http://business-api.jerryf.cn'
 }
 
 const TEST_URL = {
