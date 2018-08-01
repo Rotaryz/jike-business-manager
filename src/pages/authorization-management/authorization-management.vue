@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { ERR_OK } from 'api/config'
+  import { ERR_OK, PROD_URL_MIN } from 'api/config'
   import { Authorization } from 'api'
   import Toast from 'components/toast/toast'
 
@@ -49,7 +49,7 @@
       _hideShade () {
         this.showShade = false
       },
-      _doubelCheck() {
+      _doubelCheck () {
         this._getSuiteList()
       },
       _getSuiteList () {
@@ -65,6 +65,14 @@
         //
         //   return
         // }
+        // https://business-api.jerryf.cn/api/merchant/mini-authorization
+        if (item.suite_alias === 'mini_program') {
+          let redirectUri = location.origin + '/authorizationDetail?type=min'
+          let url = `${PROD_URL_MIN.api}/api/merchant/mini-authorization?callback_redirect_url=${redirectUri}&access_token=${localStorage.getItem('business-token')}`
+          this._showShade()
+          window.open(url)
+          return
+        }
         let suiteId = item.suite_id
         Authorization.workServer({suite_id: suiteId}).then((res) => {
           if (res.error === ERR_OK) {
@@ -99,7 +107,7 @@
   .big-box
     display: flex
     padding-left: 200px
-    flex-wrap :wrap
+    flex-wrap: wrap
     .item-box
       position: relative
       margin-top: 51px
@@ -139,14 +147,16 @@
       opacity: 0
     &.fade-enter-to, &.fade-leave-to
       transition: opacity .2s ease-in-out
+
   .shade
     all-center()
     box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.60)
     border-radius: 3px
     background: $color-white
-    box-sizing :border-box
+    box-sizing: border-box
     width: 534px
     height: 261px
+
   .shade-tip
     text-indent: 36px
     margin-top: 46px

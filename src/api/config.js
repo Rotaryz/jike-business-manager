@@ -5,7 +5,8 @@ const LOCAL_URL = {
 }
 
 const DEV_URL = {
-  api: 'http://business-api.jerryf.cn'
+  api: 'https://business-api.jkweixin.com'
+  // api: 'http://business-api.jerryf.cn'
 }
 
 const TEST_URL = {
@@ -19,3 +20,5 @@ const PROD_URL = {
 export const BASE_URL = env.NODE_ENV === 'production' ? PROD_URL : env.NODE_ENV === 'test' ? TEST_URL : env.NODE_ENV === 'dev' ? DEV_URL : LOCAL_URL
 
 export const ERR_OK = 0
+
+export const PROD_URL_MIN = PROD_URL
