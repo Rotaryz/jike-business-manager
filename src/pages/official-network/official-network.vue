@@ -67,7 +67,8 @@
         image: [],
         isNew: true,
         imageIndex: null,
-        id: null
+        id: null,
+        dels: []
       }
     },
     created () {
@@ -75,6 +76,7 @@
     },
     methods: {
       _delCover (index) {
+        this.dels.push(this.image[index].id)
         this.image.splice(index, 1)
       },
       _upImage (e) {
@@ -137,6 +139,7 @@
           })
           return
         }
+        data = Object.assign({}, data, {dels: this.dels})
         Website.upWebsite(this.id, data).then((res) => {
           if (res.error === ERR_OK) {
             let title = release ? '发布成功' : '保存成功'
@@ -171,10 +174,10 @@
       height: 65.6%
       overflow-x: hidden
       position: absolute
-      background:$color-white
-      border-radius :5px
-      padding : 15px
-      box-sizing :border-box
+      background: $color-white
+      border-radius: 5px
+      padding: 15px
+      box-sizing: border-box
       .goods-icon
         font-size: $font-size-14
         color: $color-text
@@ -211,7 +214,7 @@
       background: $color-white
       padding: 15px
       .net-img
-        display :block
+        display: block
         width: 100%
     .iphone
       width: 100%
@@ -256,6 +259,8 @@
       display: flex
       margin-top: 30px
       align-items: flex-start
+      max-height: 380px
+      overflow: auto
       .file
         display: none
       .image-file-box
