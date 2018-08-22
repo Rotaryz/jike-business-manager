@@ -147,6 +147,7 @@
         Goods.goodsBatchUpdate(data).then((res) => {
           if (res.error === ERR_OK) {
             this.$refs.formBox.showContent('批量操作完成')
+            this.upList = []
             this._goodsList()
             this._hideShade()
           }
