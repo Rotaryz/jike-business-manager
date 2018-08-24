@@ -9,9 +9,7 @@
             <span class="goods-small-box goods-small-width"></span>
             <span class="goods-small-text">公司介绍</span>
           </div>
-          <div class="text" v-if="content">
-            {{content}}
-          </div>
+          <pre class="text" v-if="content">{{content}}</pre>
           <div class="img-box" v-if="image.length">
             <img v-for="(item, index) in image" :key="index" :src="item.url" class="net-img" mode="widthFix">
           </div>
@@ -206,6 +204,9 @@
         line-height: 22px
         padding: 15px
         box-sizing: border-box
+        white-space: pre-wrap
+        word-wrap: break-word
+        -webkit-box-orient: vertical
     .img-box
       margin-top: 15px
       border-radius: 2px

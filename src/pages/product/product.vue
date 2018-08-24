@@ -37,7 +37,7 @@
           </div>
           <div class="list-item list-text">{{item.title}}</div>
           <div class="list-item list-text">{{item.updated_at}}</div>
-          <div class="list-item list-text">{{item.merchant_id}}</div>
+          <div class="list-item list-text">{{item.merchant_name}}</div>
           <div class="list-item list-text">{{item.is_online ? '已上架' : '已下架'}}</div>
           <div class="list-item"><span class="showDetail"><span @click="_upProduct(item.id)">编辑<span class="line">|</span></span><span class="audit" @click="_delItem(item.id)">删除</span></span></div>
         </li>

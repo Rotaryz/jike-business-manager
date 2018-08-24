@@ -11,7 +11,7 @@
       </div>
       <div class="account-center-item">
         <span class="account-center-text">名片数量</span>
-        <span class="account-center-msg">{{userInfo.init_stock}}/100</span>
+        <span class="account-center-msg">{{userInfo.use_radar_count}}/{{userInfo.init_stock}}</span>
       </div>
       <div class="account-center-item">
         <span class="account-center-text">到期时间</span>
@@ -80,12 +80,12 @@
 
 <script>
   import FormBox from 'components/form-box/form-box'
-  import { Reset } from 'api'
-  import { ERR_OK } from '../../api/config'
+  import {Reset} from 'api'
+  import {ERR_OK} from '../../api/config'
 
   export default {
     name: 'account-center',
-    data () {
+    data() {
       return {
         pageShow: false,
         bussName: '',
@@ -96,7 +96,7 @@
         anPassword: ''
       }
     },
-    created () {
+    created() {
       Reset.merchantData().then((res) => {
         if (res.error === ERR_OK) {
           this.userInfo = res.data
@@ -106,14 +106,14 @@
       })
     },
     methods: {
-      _showShade (name) {
+      _showShade(name) {
         this.showType = name
         this.$refs.formBox.showShade()
       },
-      _hideShade () {
+      _hideShade() {
         this.$refs.formBox.hideShade()
       },
-      _resetName () {
+      _resetName() {
         Reset.resetName({name: this.bussName}).then((res) => {
           this._hideShade()
           this.userInfo.name = this.bussName
@@ -121,8 +121,14 @@
           console.log(res)
         })
       },
-      _resetPass () {
-        if (this.password !== this.anPassword && this.password) {
+      _resetPass() {
+        if (!this.oldPassword) {
+          this.$refs.formBox.showContent('旧密码不能为空')
+          return
+        } else if (!this.password) {
+          this.$refs.formBox.showContent('新密码不能为空')
+          return
+        } else if (this.password !== this.anPassword) {
           this.$refs.formBox.showContent('两次输入密码不一致')
           return
         }
