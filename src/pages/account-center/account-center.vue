@@ -33,7 +33,7 @@
         <p class="shade-title">修改企业名称<span class="close" @click="_hideShade">&times;</span></p>
         <div class="chang-msg">
           <span>企业名称</span>
-          <input type="text" class="change-name" v-model="bussName">
+          <input type="text" class="change-name" v-model="bussName" maxlength="15">
         </div>
         <div class="shade-btn">
           <div class="share-btn-item hare-btn-white hand" @click="_hideShade">取消</div>
