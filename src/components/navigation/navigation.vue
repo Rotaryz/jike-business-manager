@@ -72,7 +72,7 @@
       }],
       showHeight: HEIGHT
     }, {
-      title: '小程序管理',
+      title: '名片管理',
       url: 'officialNetwork',
       icon: require('./icon-applet_selected@2x.png'),
       childrenIndex: -1,
@@ -82,6 +82,9 @@
       }, {
         title: '公司产品',
         url: 'product'
+      }, {
+        title: '默认名片',
+        url: 'default-card'
       }],
       showHeight: HEIGHT
     }, {
@@ -123,7 +126,7 @@
   //        url: '#/container/order'
   //      }
   export default {
-    data () {
+    data() {
       return {
         smallIndex: 0,
         title: '商家管理平台',
@@ -140,12 +143,12 @@
         sortTimer: null
       }
     },
-    created () {
+    created() {
       let path = this.$route.matched[1].path
       this.info(path)
     },
     methods: {
-      info (path) {
+      info(path) {
         //     待处理
         switch (path) {
           case '/container/productManagement':
@@ -176,7 +179,7 @@
           }
         })
       },
-      showChild (index, status = true) {
+      showChild(index, status = true) {
         this.smallIndex = index
         clearInterval(this.timer)
         if (this.navList[index].children.length === 1) {
@@ -238,19 +241,19 @@
           }
         }
       },
-      bigChildren (index) {
+      bigChildren(index) {
         this.navList[this.recodIndex].childrenIndex = index
         let num = this.recodIndex
         this.navList[num].url = this.navList[num].children[this.navList[num].childrenIndex].url
       },
-      hoverChild (index) {
+      hoverChild(index) {
         this.hoverIndex = index
         this.hoverChildIndex = this.navList[index].childrenIndex
       },
-      hideHover () {
+      hideHover() {
         this.hoverIndex = -1
       },
-      hoverDetail (index, parent) {
+      hoverDetail(index, parent) {
         this.smallIndex = parent
         this.hoverChildIndex = index
         this.hoverIndex = parent
@@ -267,7 +270,7 @@
         }
         this.showChild(parent)
       },
-      isShowBig () {
+      isShowBig() {
         this.showAnimation = !this.showAnimation
         let marWidth = 0
         this.showAnimation ? marWidth = 79 : marWidth = 200
@@ -297,7 +300,7 @@
       }
     },
     watch: {
-      '$route' (to, form) {
+      '$route'(to, form) {
         let title = to.meta.title
         // let item = this.navList.find(item => item.url)
         sessionStorage.setItem('title', title)

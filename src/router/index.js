@@ -15,6 +15,7 @@ const AddEmployees = () => import('pages/add-employees/add-employees')
 const AuthorityManagement = () => import('pages/authority-management/authority-management')
 const AuthorizationManagement = () => import('pages/authorization-management/authorization-management')
 const AuthorizationDetail = () => import('pages/authorization-detail/authorization-detail')
+const DefaultCard = () => import('pages/default-card/default-card')
 
 export default new Router({
   mode: 'history',
@@ -36,19 +37,19 @@ export default new Router({
         path: 'product',
         component: Product, // 产品列表
         meta: {
-          title: '小程序管理,公司产品'
+          title: '名片管理,公司产品'
         }
       }, {
         path: 'officialNetwork',
         component: OfficialNetwork, // 官网
         meta: {
-          title: '小程序管理,公司官网'
+          title: '名片管理,公司官网'
         }
       }, {
         path: 'productManagement',
         component: ProductManagement, // 产品新建
         meta: {
-          title: '小程序管理,公司产品,添加产品'
+          title: '名片管理,公司产品,添加产品'
         }
       }, {
         path: 'organizationalStructure', // 组织架构
@@ -79,6 +80,12 @@ export default new Router({
         component: AddEmployees,
         meta: {
           title: '员工管理,组织架构,员工编辑'
+        }
+      }, {
+        path: 'default-card', // 添加员工
+        component: DefaultCard,
+        meta: {
+          title: '名片管理,默认名片'
         }
       }]
     },

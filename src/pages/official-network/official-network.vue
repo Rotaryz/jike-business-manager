@@ -19,6 +19,22 @@
         <div class="official-content-box">
           <p class="title">官网内容</p>
           <div type="text" class="official-content"></div>
+          <div class="official-image official-short">
+            <span class="official-tip">公司视频</span>
+            <div class="image-file-box">
+              <div class="add-pic" v-if="videoUrl">
+                <video :src="videoUrl" class="add-pics"></video>
+                <div class="close-icon hand" @click.stop="_delVideo()">
+                  <img class="close-icon" src="./icon-del@2x.png">
+                </div>
+              </div>
+              <div class="add-pic" v-if="!videoUrl">
+                <img src="./pic-uploading-video@2x.png" class="add-pics hand">
+                <input type="file" class="file" id="product-video" @change="_upVideo($event)" accept="video/*">
+              </div>
+              <span class="image-tip">可上传50M以内视频</span>
+            </div>
+          </div>
           <div class="official-text-box">
             <span class="official-tip">公司介绍</span>
             <textarea name="official" id="official-msg" placeholder="请输入公司介绍" v-model="content"></textarea>
@@ -26,8 +42,8 @@
           <div class="official-image">
             <span class="official-tip">公司图片</span>
             <div class="image-file-box">
-              <div class="add-pic" v-for="(item, index) in image" :key="index">
-                <img :src="item.url" class="add-pics hand" @click="_upImage(index)">
+              <div class="add-pic" v-for="(item, index) in image" :key="index" :style="{'background-image': 'url(' +item.url + ')'}">
+                <!--<img :src="item.url" class="add-pics hand" @click="_upImage(index)">-->
                 <div class="close-icon hand" @click.stop="_delCover(index)">
                   <img class="close-icon" src="./icon-del@2x.png">
                 </div>
@@ -36,9 +52,12 @@
                 <img src="./pic-uploading@2x.png" class="add-pics hand" @click="_upImage(-1)">
               </div>
               <input type="file" class="file" id="product-cover" @change="_upImage($event)">
-              <span class="image-tip">建议图片比例5:4, 2M以内</span>
+              <span class="image-tip">建议图片比例5:4, 10M以内</span>
             </div>
-
+          </div>
+          <div class="official-text-box">
+            <span class="official-tip">公司电话</span>
+            <input type="text" placeholder="请输入" class="tel" v-model="phone">
           </div>
           <div class="official-btn">
             <div class="official-btn-item official-btn-while hand" @click="_setNetWork(0)">保存</div>
@@ -52,12 +71,12 @@
 
 <script>
   import FormBox from 'components/form-box/form-box'
-  import { Website, UpLoad } from 'api'
-  import { ERR_OK } from 'api/config'
+  import {Website, UpLoad} from 'api'
+  import {ERR_OK} from 'api/config'
 
   export default {
     name: 'official-network',
-    data () {
+    data() {
       return {
         pageShow: false,
         content: '',
@@ -66,18 +85,35 @@
         isNew: true,
         imageIndex: null,
         id: null,
-        dels: []
+        dels: [],
+        videoUrl: '',
+        video: {},
+        phone: ''
       }
     },
-    created () {
+    created() {
       this._getNetWork()
     },
     methods: {
-      _delCover (index) {
+      _delVideo() {
+        this.videoUrl = ''
+        this.video = {}
+      },
+      _delCover(index) {
         this.dels.push(this.image[index].id)
         this.image.splice(index, 1)
       },
-      _upImage (e) {
+      _upVideo(e) {
+        let param = this._infoImage(e.target.files[0])
+        UpLoad.upLoadVideo(param).then((res) => {
+          if (res.error !== ERR_OK) {
+            this.$refs.formBox.showContent(res.message)
+          }
+          this.videoUrl = res.data.url
+          this.video = {id: 0, file_id: res.data.id, sort: 0}
+        })
+      },
+      _upImage(e) {
         let type = typeof e
         if (type === 'number') {
           this.imageIndex = e
@@ -99,7 +135,7 @@
           })
         }
       },
-      _getNetWork () {
+      _getNetWork() {
         Website.websiteDetail().then((res) => {
           this.isNew = res.error !== ERR_OK
           if (res.error === ERR_OK) {
@@ -112,19 +148,19 @@
           }
         })
       },
-      _infoImage (file) {
+      _infoImage(file) {
         let param = new FormData() // 创建form对象
         param.append('file', file, file.name)// 通过append向form对象添加数据
         return param
       },
-      _setNetWork (release) {
+      _setNetWork(release) {
         if (!this.content) {
           this.$refs.formBox.showContent('请输入公司介绍')
         }
         if (!this.image.length) {
           this.$refs.formBox.showContent('请上传公司图片')
         }
-        let data = {introduction: this.content, image: this.image, is_release: release}
+        let data = {introduction: this.content, image: this.image, is_release: release, video: this.video}
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
@@ -176,6 +212,8 @@
       border-radius: 5px
       padding: 15px
       box-sizing: border-box
+      &::-webkit-scrollbar
+        display: none
       .goods-icon
         font-size: $font-size-14
         color: $color-text
@@ -224,7 +262,7 @@
       overflow: hidden
       box-sizing: border-box
       .official-content-box
-        width: 80%
+        width: 81%
     .official-tip
       white-space: nowrap
       tab-index: 12px
@@ -250,50 +288,79 @@
         height: 8.33vh
         box-sizing: border-box
         padding: 8px 0 0 8px
+        font-size: $font-size-medium14
         color: $color-text
+        font-family: $fontFamilyLight
         border: 1px solid $color-lineCC
         &::textarea-placeholder
           color: $color-lineCC
           font-size: $font-size-medium14
           font-family: $fontFamilyLight
+      .tel
+        height: 28px
+        width: 270px
+        margin-left: 16px
+        border: 0.5px solid $color-lineCC
+        text-indent: 8px
+        font-size: $font-size-medium14
+        color: $color-text
+        font-family: $fontFamilyLight
+        &::-webkit-input-placeholder
+          color: $color-lineCC
+          font-size: $font-size-medium14
+          font-family: $fontFamilyLight
     .official-image
       display: flex
-      margin-top: 30px
       align-items: flex-start
-      max-height: 380px
-      overflow: auto
+      margin-top: 30px
       .file
         display: none
       .image-file-box
+        padding-top: 14px
+        margin-top: -14px
         display: flex
         flex-wrap: wrap
         align-items: flex-end
         position: relative
         margin-bottom: 10px
+        max-height: 190px
+        overflow-y: auto
+        &::-webkit-scrollbar
+          display: none
         .add-pic
+          background-position: center
+          background-repeat: no-repeat
+          background-size: cover
           margin-bottom: 10px
           margin-left: 16px
           width: 120px
           height: 96px
           position: relative
-          overflow: hidden
         .add-pics
           width: 100%
+        #product-video
+          display: block
+          position: absolute
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+          z-index: 100
+          opacity: 0
         .close-icon
-          height: 16.5px
-          width: 16.5px
+          height: 26px
+          width: 26px
           line-height: 16.5px
           text-align: center
-          background: rgba(0, 0, 0, 0.20)
           color: $color-white
           font-size: $font-size-10
           position: absolute
-          right: 0px
-          top: 0px
+          right: -6.5px
+          top: -6.5px
           .close-icon
             cll-center()
-            height: 16.5px
-            width: 16.5px
+            height: 26px
+            width: @height
         .image-tip
           margin-bottom: 10px
           margin-top: 10px
@@ -301,6 +368,11 @@
           white-space: normal
           margin-left: 10px
           font-size: $font-size-medium14
+    .official-short
+      height: 96px
+      .image-file-box
+        .add-pic
+          margin-bottom: 0
     .official-btn
       margin-top: 40px
       margin-left: 84px
