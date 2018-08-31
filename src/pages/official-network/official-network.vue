@@ -145,7 +145,7 @@
             res = res.data
             this.content = res.introduction
             this.image = res.merchant_image
-            this.videoUrl = res.merchant_video[0].url
+            this.videoUrl = res.merchant_video.length ? res.merchant_video[0].url : ''
             this.video = res.merchant_video[0]
             this.phone = res.telephone
             this.id = res.id
