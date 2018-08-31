@@ -164,7 +164,7 @@
         if (!this.image.length) {
           this.$refs.formBox.showContent('请上传公司图片')
         }
-        let data = {introduction: this.content, image: this.image, is_release: release, video_id: this.video.file_id, telephone: this.phone}
+        let data = {introduction: this.content, image: this.image, is_release: release, video_id: this.video.file_id || '', telephone: this.phone}
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
