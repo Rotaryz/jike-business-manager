@@ -9,13 +9,30 @@
         <span class="account-center-msg">{{userInfo.name}}</span>
         <span class="change hand" @click="_showShade('name')">修改</span>
       </div>
+      <div class="account-center-item account-center-img">
+        <span class="account-center-text">企业LOGO</span>
+        <div class="image-file-box">
+          <div class="add-pic" :style="{'background-image': 'url(' + showImage + ')'}">
+            <!--<img :src="item.url" class="add-pics hand" @click="_upImage(index)">-->
+            <div class="close-icon hand" v-if="imageUrl" @click.stop="_delCover()">
+              <img class="close-icon" src="./icon-del@2x.png">
+            </div>
+            <input type="file" class="file" id="product-cover" accept="image/*" @change="_upImage($event)">
+          </div>
+          <!--<div class="add-pic" v-if="!imageUrl">-->
+          <!--<img src="./pic-uploading@2x.png" class="add-pics hand">-->
+          <!--<input type="file" class="file" id="product-cover" @change="_upImage($event)">-->
+          <!--</div>-->
+          <span class="image-tip">企业动态的头像，点击可更换图片</span>
+        </div>
+      </div>
       <div class="account-center-item">
         <span class="account-center-text">名片数量</span>
         <span class="account-center-msg">{{userInfo.use_radar_count}}/{{userInfo.init_stock}}</span>
       </div>
       <div class="account-center-item">
-        <span class="account-center-text">到期时间</span>
-        <span class="account-center-msg">{{userInfo.expire_time}}</span>
+        <span class="account-center-text">使用时间</span>
+        <span class="account-center-msg">{{userInfo.created_at}} 至 {{userInfo.expire_time}}</span>
       </div>
       <div class="account-center-item">
         <span class="account-center-text">登录账号</span>
@@ -80,8 +97,9 @@
 
 <script>
   import FormBox from 'components/form-box/form-box'
-  import {Reset} from 'api'
+  import {Reset, UpLoad} from 'api'
   import {ERR_OK} from '../../api/config'
+  import PIC from './pic-uploading@2x.png'
 
   export default {
     name: 'account-center',
@@ -93,19 +111,63 @@
         userInfo: {},
         password: '',
         oldPassword: '',
-        anPassword: ''
+        anPassword: '',
+        imageUrl: '',
+        pic: PIC
+      }
+    },
+    computed: {
+      showImage() {
+        let url = this.imageUrl || this.pic
+        console.log(url)
+        return url
       }
     },
     created() {
       Reset.merchantData().then((res) => {
         if (res.error === ERR_OK) {
           this.userInfo = res.data
-          this.name = res.data.name
+          this.userInfo.created_at = this.userInfo.created_at ? this.userInfo.created_at.slice(0, 10) : ''
+          this.userInfo.expire_time = this.userInfo.expire_time ? this.userInfo.expire_time.slice(0, 10) : ''
+            this.name = res.data.name
+          this.imageUrl = res.data.image_url
           console.log(this.userInfo)
         }
       })
     },
     methods: {
+      _delCover() {
+        this.imageUrl = ''
+      },
+      _infoImage(file) {
+        let param = new FormData() // 创建form对象
+        param.append('file', file, file.name)// 通过append向form对象添加数据
+        return param
+      },
+      _upImage(e) {
+        if (e.target) {
+          let param = this._infoImage(e.target.files[0])
+          UpLoad.upLoadImage(param).then((res) => {
+            if (res.error === ERR_OK) {
+              res = res.data
+              this.imageUrl = res.url
+              this._changeLogo(res.id)
+              e.target.value = ''
+              return
+            }
+            this.$refs.formBox.showContent(res.message)
+          })
+        }
+      },
+      _changeLogo(id) {
+        Reset.updateLogo({image_id: id}).then((res) => {
+          if (res.error === ERR_OK) {
+            this.$refs.formBox.showContent('修改成功')
+            return
+          }
+          this.$refs.formBox.showContent(res.message)
+        })
+      },
       _showShade(name) {
         this.showType = name
         this.$refs.formBox.showShade()
@@ -167,8 +229,12 @@
     color: $color-text
     border-bottom: 1px solid $color-line
     position: relative
+    display: flex
+    .account-center-text
+      min-width: 80px
+      white-space: nowrap
     .account-center-msg
-      margin-left: 346px
+      margin-left: 344px
     .change
       col-center()
       text-decoration: underline
@@ -283,4 +349,64 @@
       .hare-btn-orgin
         background: $color-orgin-theme
         color: $color-white
+
+  /*logo*/
+  .account-center-img
+    height: 137px
+    .image-file-box
+      margin-left: 344px
+      padding-top: 14px
+      display: flex
+      flex-wrap: wrap
+      align-items: flex-end
+      position: relative
+      margin-bottom: 10px
+      max-height: 190px
+      overflow-y: auto
+      &::-webkit-scrollbar
+        display: none
+      .add-pic
+        background-position: center
+        background-repeat: no-repeat
+        background-size: cover
+        margin-bottom: 10px
+        margin-left: 16px
+        width: 120px
+        height: 96px
+        position: relative
+      .add-pics
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+      #product-cover
+        display: block
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: 100
+        opacity: 0
+      .close-icon
+        height: 26px
+        width: 26px
+        line-height: 16.5px
+        text-align: center
+        color: $color-white
+        font-size: $font-size-10
+        position: absolute
+        right: -12px
+        top: -12px
+        .close-icon
+          top: 0
+          left: 0
+          height: 26px
+          width: @height
+      .image-tip
+        color: $color-lineCC
+        white-space: normal
+        line-height: 96px
+        transform: translateY(-10px)
+        font-size: $font-size-medium14
 </style>

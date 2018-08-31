@@ -6,7 +6,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  userList (data) {
+  userList(data) {
     let url = 'api/merchant/user-list'
     return http.get(url, data)
   },
@@ -15,7 +15,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  syncUser () {
+  syncUser() {
     let url = 'api/merchant/sync-user'
     return http.get(url)
   },
@@ -24,7 +24,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  createcUser (data) {
+  createcUser(data) {
     let url = 'api/merchant/create-user'
     return http.post(url, data)
   },
@@ -33,7 +33,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  getUser (data) {
+  getUser(data) {
     let url = 'api/merchant/get-user'
     return http.get(url, data)
   },
@@ -42,7 +42,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  updateUser (data) {
+  updateUser(data) {
     let url = 'api/merchant/update-user'
     return http.put(url, data)
   },
@@ -51,7 +51,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  deleteUser (data) {
+  deleteUser(data) {
     let url = 'api/merchant/delete-user'
     return http.delete(url, data)
   },
@@ -60,7 +60,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  aiRadarChange (data) {
+  aiRadarChange(data) {
     let url = 'api/merchant/ai-radar-change'
     return http.get(url, data)
   },
@@ -69,7 +69,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  bossRadarChange (data) {
+  bossRadarChange(data) {
     let url = 'api/merchant/boss-radar-change'
     return http.get(url, data)
   },
@@ -78,8 +78,26 @@ export default {
    * @param data
    * @returns {*}
    */
-  getEmployeeQrcode (data) {
+  getEmployeeQrcode(data) {
     let url = 'api/merchant/get-employee-qrcode'
     return http.get(url, data)
+  },
+  /**
+   * 名片信息列表
+   * @param data
+   * @returns {*}
+   */
+  businessCard(data) {
+    let url = 'api/merchant/business-card'
+    return http.get(url, data)
+  },
+  /**
+   * 设置默认名片
+   * @param data
+   * @returns {*}
+   */
+  setDefaultCard(data) {
+    let url = 'api/merchant/set-default-card'
+    return http.put(url, data)
   }
 }

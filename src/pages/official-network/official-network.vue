@@ -4,6 +4,9 @@
       <div class="iphone-box">
         <img src="./pic-nullpage@2x.png" class="iphone">
         <div class="off-box" v-if="image.length || content">
+          <div class="video-box" v-if="videoUrl">
+            <video :src="videoUrl" class="phone-video"></video>
+          </div>
           <div class="goods-icon">
             <span class="goods-small-box goods-small-tall"></span>
             <span class="goods-small-box goods-small-width"></span>
@@ -140,10 +143,11 @@
           this.isNew = res.error !== ERR_OK
           if (res.error === ERR_OK) {
             res = res.data
-            console.log(res)
             this.content = res.introduction
             this.image = res.merchant_image
-            console.log(this.image)
+            this.videoUrl = res.merchant_video[0].url
+            this.video = res.merchant_video[0]
+            this.phone = res.telephone
             this.id = res.id
           }
         })
@@ -160,7 +164,7 @@
         if (!this.image.length) {
           this.$refs.formBox.showContent('请上传公司图片')
         }
-        let data = {introduction: this.content, image: this.image, is_release: release, video: this.video}
+        let data = {introduction: this.content, image: this.image, is_release: release, video_id: this.video.file_id, telephone: this.phone}
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
@@ -210,10 +214,14 @@
       position: absolute
       background: $color-white
       border-radius: 5px
-      padding: 15px
       box-sizing: border-box
       &::-webkit-scrollbar
         display: none
+      .video-box
+        max-height: 200px
+        overflow :hidden
+      .phone-video
+        width: 100%
       .goods-icon
         font-size: $font-size-14
         color: $color-text
@@ -233,6 +241,8 @@
           all-center()
 
       .text
+        width: 94%
+        margin : 0 auto
         border-all: (rgba(32, 32, 46, 0.10))
         box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
         border-radius: 2px
@@ -246,7 +256,8 @@
         word-wrap: break-word
         -webkit-box-orient: vertical
     .img-box
-      margin-top: 15px
+      width: 94%
+      margin: 15px auto 0
       border-radius: 2px
       border-1px()
       box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)

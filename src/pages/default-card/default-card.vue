@@ -31,9 +31,9 @@
           <div class="list-item list-text">{{item.department}}</div>
           <div class="list-item">
             <div class="tip">
-              <div :class="{move_fa:item.boss_radar_status}" @click="_bossRadarChange(item)">
-                <span class="circular" :class="{move: item.boss_radar_status}"></span>
-                <span class="status" :class="item.boss_radar_status ? 'status-left' : 'status-right'">{{item.boss_radar_status ? '开' : '关'}}</span>
+              <div :class="{move_fa:item.default_card}" @click="_defaultCard(item)">
+                <span class="circular" :class="{move: item.default_card}"></span>
+                <span class="status" :class="item.default_card ? 'status-left' : 'status-right'">{{item.default_card ? '开' : '关'}}</span>
               </div>
             </div>
           </div>
@@ -87,37 +87,14 @@
         this.imageUrl = this.detail.corp_wxqrcode
         this.$refs.formBox.showShade()
       },
-      _getQrCode(id, name) {
-        this.shadeTitle = name + '的二维码'
-        let data = {user_id: id}
-        this.$refs.formBox.showShade()
-        this.imageUrl = ''
-        Employee.getEmployeeQrcode(data).then((res) => {
+      _defaultCard(item) {
+        let status = item.default_card ? 0 : 1
+        let data = {default_card: status, id: item.id}
+        let index = this.userList.findIndex(items => items.id === item.id)
+        Employee.setDefaultCard(data).then((res) => {
           if (res.error === ERR_OK) {
-            this.imageUrl = res.data.qrcode
-            return
-          }
-          this.$refs.formBox.showContent(res.message)
-        })
-      },
-      _aiRadarChange(item) {
-        let status = item.ai_radar_status ? 0 : 1
-        let data = {is_open: status, user_id: item.id}
-        Employee.aiRadarChange(data).then((res) => {
-          if (res.error === ERR_OK) {
-            this._getList()
-            this.$refs.formBox.showContent(status ? '成功开启' : '成功关闭')
-            return
-          }
-          this.$refs.formBox.showContent(res.message)
-        })
-      },
-      _bossRadarChange(item) {
-        let status = item.boss_radar_status ? 0 : 1
-        let data = {is_open: status, user_id: item.id}
-        Employee.bossRadarChange(data).then((res) => {
-          if (res.error === ERR_OK) {
-            this._getList()
+            this.userList[index].default_card = status
+            // this._getList()
             this.$refs.formBox.showContent(status ? '成功开启' : '成功关闭')
             return
           }
@@ -126,11 +103,9 @@
       },
       _getList() {
         let data = {name: this.name, page: this.page, limit: 10}
-        Employee.userList(data).then((res) => {
+        Employee.businessCard(data).then((res) => {
           if (res.error === ERR_OK) {
             this.detail = {
-              init_stock: res.init_stock,
-              use_radar_count: res.use_radar_count,
               corp_wxqrcode: res.corp_wxqrcode
             }
             console.log(this.detail)
@@ -141,7 +116,9 @@
               total_page: pages.last_page
             }]
             this.userList = res.data
+            return
           }
+          this.$refs.formBox.showContent(res.message)
         })
       },
       _addPage(page) {
@@ -365,7 +342,7 @@
         transition: transform 0.5s
 
   .shade-tip
-    text-align :center
+    text-align: center
     font-size: $font-size-medium14
     font-family: $fontFamilyLight
     color: $color-text

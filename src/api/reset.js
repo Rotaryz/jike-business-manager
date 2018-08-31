@@ -6,7 +6,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  resetName (data) {
+  resetName(data) {
     let url = 'api/merchant/reset-name'
     return http.post(url, data)
   },
@@ -15,7 +15,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  resetPassword (data) {
+  resetPassword(data) {
     let url = 'api/merchant/reset-password'
     return http.post(url, data)
   },
@@ -24,8 +24,17 @@ export default {
    * @param data
    * @returns {*}
    */
-  merchantData () {
+  merchantData() {
     let url = 'api/merchant/merchant-data'
     return http.get(url)
+  },
+  /**
+   * 上传企业LOGO
+   * @param data
+   * @returns {*}
+   */
+  updateLogo(data) {
+    let url = 'api/merchant/update-logo'
+    return http.post(url, data)
   }
 }
