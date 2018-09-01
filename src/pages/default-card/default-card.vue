@@ -28,7 +28,7 @@
           <div class="list-item list-text">{{item.name}}</div>
           <div class="list-item list-text">{{item.position}}</div>
           <div class="list-item list-text">{{item.mobile}}</div>
-          <div class="list-item list-text">{{item.department}}</div>
+          <div class="list-item list-text">{{item.sell_ability}}</div>
           <div class="list-item">
             <div class="tip">
               <div :class="{move_fa:item.default_card}" @click="_defaultCard(item)">
