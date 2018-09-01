@@ -90,7 +90,7 @@
         id: null,
         dels: [],
         videoUrl: '',
-        video: {},
+        videoId: '',
         phone: ''
       }
     },
@@ -100,7 +100,7 @@
     methods: {
       _delVideo() {
         this.videoUrl = ''
-        this.video = {}
+        this.videoId = ''
       },
       _delCover(index) {
         this.dels.push(this.image[index].id)
@@ -113,7 +113,7 @@
             this.$refs.formBox.showContent(res.message)
           }
           this.videoUrl = res.data.url
-          this.video = {id: 0, file_id: res.data.id, sort: 0}
+          this.videoId = res.data.id
         })
       },
       _upImage(e) {
@@ -146,7 +146,7 @@
             this.content = res.introduction
             this.image = res.merchant_image
             this.videoUrl = res.merchant_video.length ? res.merchant_video[0].url : ''
-            this.video = res.merchant_video[0]
+            this.videoId = res.merchant_video[0] ? res.merchant_video[0].id : ''
             this.phone = res.telephone
             this.id = res.id
           }
@@ -164,7 +164,7 @@
         if (!this.image.length) {
           this.$refs.formBox.showContent('请上传公司图片')
         }
-        let data = {introduction: this.content, image: this.image, is_release: release, video_id: this.video.file_id || '', telephone: this.phone}
+        let data = {introduction: this.content, image: this.image, is_release: release, video_id: this.videoId, telephone: this.phone}
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
@@ -219,7 +219,7 @@
         display: none
       .video-box
         max-height: 200px
-        overflow :hidden
+        overflow: hidden
       .phone-video
         width: 100%
       .goods-icon
@@ -242,7 +242,7 @@
 
       .text
         width: 94%
-        margin : 0 auto
+        margin: 0 auto
         border-all: (rgba(32, 32, 46, 0.10))
         box-shadow: 0 4px 12px 0 rgba(43, 43, 145, 0.07)
         border-radius: 2px
