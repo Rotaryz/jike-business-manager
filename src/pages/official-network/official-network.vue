@@ -32,6 +32,7 @@
                 </div>
               </div>
               <div class="add-pic" v-if="!videoUrl">
+                <img src="./loading.gif" class="loading" v-if="loading">
                 <img src="./pic-uploading-video@2x.png" class="add-pics hand">
                 <input type="file" class="file" id="product-video" @change="_upVideo($event)" accept="video/*">
               </div>
@@ -91,7 +92,8 @@
         dels: [],
         videoUrl: '',
         videoId: '',
-        phone: ''
+        phone: '',
+        loading: false
       }
     },
     created() {
@@ -106,15 +108,16 @@
         this.dels.push(this.image[index].id)
         this.image.splice(index, 1)
       },
-      _upVideo(e) {
+      async _upVideo(e) {
+        this.loading = true
         let param = this._infoImage(e.target.files[0])
-        UpLoad.upLoadVideo(param).then((res) => {
-          if (res.error !== ERR_OK) {
-            this.$refs.formBox.showContent(res.message)
-          }
-          this.videoUrl = res.data.url
-          this.videoId = res.data.id
-        })
+        let res = await UpLoad.upLoadVideo(param)
+        this.loading = false
+        if (res.error !== ERR_OK) {
+          this.$refs.formBox.showContent(res.message)
+        }
+        this.videoUrl = res.data.url
+        this.videoId = res.data.id
       },
       _upImage(e) {
         let type = typeof e
@@ -350,6 +353,9 @@
           width: 120px
           height: 96px
           position: relative
+          .loading
+            height: 30px
+            all-center()
         .add-pics
           width: 100%
         #product-video
