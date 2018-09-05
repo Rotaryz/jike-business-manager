@@ -170,7 +170,6 @@
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
-              this._getNetWork()
               let title = release ? '发布成功' : '保存成功'
               this.$refs.formBox.showContent(title)
               this._getNetWork()
