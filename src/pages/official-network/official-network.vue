@@ -170,6 +170,7 @@
         if (this.isNew) {
           Website.createWebsite(data).then((res) => {
             if (res.error === ERR_OK) {
+              this._getNetWork()
               let title = release ? '发布成功' : '保存成功'
               this.$refs.formBox.showContent(title)
               this._getNetWork()
@@ -182,9 +183,7 @@
         data = Object.assign({}, data, {dels: this.dels})
         Website.upWebsite(this.id, data).then((res) => {
           if (res.error === ERR_OK) {
-            if (release * 1 === 0) {
-              this._getNetWork()
-            }
+            this._getNetWork()
             let title = release ? '发布成功' : '保存成功'
             this.$refs.formBox.showContent(title)
             return
