@@ -36,7 +36,7 @@
                 <img src="./pic-uploading-video@2x.png" class="add-pics hand">
                 <input type="file" class="file" id="product-video" @change="_upVideo($event)" accept="video/*">
               </div>
-              <span class="image-tip">可上传50M以内视频</span>
+              <span class="image-tip">可上传30M以内视频</span>
             </div>
           </div>
           <div class="official-text-box">
