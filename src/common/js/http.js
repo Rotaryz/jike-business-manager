@@ -6,7 +6,7 @@ import _this from '../../main'
 
 // const router = new VueRouter()
 
-const TIME_OUT = 10000
+const TIME_OUT = 10000 * 20
 const COMMON_HEADER = {}
 const ERR_OK = 0
 const ERR_NO = -404
